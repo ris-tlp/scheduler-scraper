@@ -12,4 +12,15 @@ url = "https://registrar.kfupm.edu.sa/CourseOffering"
 
 response = requests.post(url, data=payload)
 soup = BeautifulSoup(response.text, 'html.parser')
+listTest = []
 
+for row in soup.find_all("div", class_="trow"):
+    listTest.append([]) #creating list of lists of each course
+    
+    for inner in row.find_all("div", class_="tdata"):
+        index = inner.text.index(":")
+        tagContent = inner.text[index+1:] #slicing to get only content
+        listTest[len(listTest) - 1].append(tagContent) #appending to end of list
+
+# for x in listTest:
+#     print(x)
