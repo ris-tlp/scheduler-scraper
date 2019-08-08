@@ -15,5 +15,18 @@ def returnCourses():
 
     return(courses)
 
+def returnFormAttributes():
+    url = "https://registrar.kfupm.edu.sa/CourseOffering"
+
+    response = requests.get(url)
+    soup = BeautifulSoup(response.text, 'html.parser')
+
+    __VIEWSTATEGENERATOR = soup.find("input", id = "__VIEWSTATEGENERATOR").get("value")
+    __VIEWSTATE = soup.find("input", id = "__VIEWSTATE").get("value")
+    __EVENTVALIDATION = soup.find("input", id = "__EVENTVALIDATION").get("value")
+
+    return __VIEWSTATEGENERATOR, __VIEWSTATE, __EVENTVALIDATION
+
+
 if __name__ == "__main__":
     pass
