@@ -1,20 +1,20 @@
-from courses_list_scrape import returnCourses, returnFormAttributes, returnLatestTerms
+from courses_list_scrape import getDepartments, getFormAttributes, getTerms
 from bs4 import BeautifulSoup
 import requests
 
-courses = returnCourses()
-terms = returnLatestTerms()
-__VIEWSTATEGENERATOR, __VIEWSTATE, __EVENTVALIDATION = returnFormAttributes()
-courseData = {}
+depts = getDepartments()
+terms = getTerms()
+__VIEWSTATEGENERATOR, __VIEWSTATE, __EVENTVALIDATION = getFormAttributes()
+deptData = {}
 
-for term in terms[:1]:
-    for course in courses[:2]:
+for term in terms:
+    for dept in depts:
         payload = {
             '__VIEWSTATE': __VIEWSTATE,
             '__VIEWSTATEGENERATOR': __VIEWSTATEGENERATOR,
             '__EVENTVALIDATION': __EVENTVALIDATION,
             'ctl00$CntntPlcHldr$ddlTerm': term,
-            'ctl00$CntntPlcHldr$ddlDept': course
+            'ctl00$CntntPlcHldr$ddlDept': dept
         }
         url = "https://registrar.kfupm.edu.sa/CourseOffering"
 
@@ -30,7 +30,7 @@ for term in terms[:1]:
                 # appending to end of list
                 data[len(data) - 1].append(tagContent)
 
-        courseData[course] = data  # setting data according to course abbrev
+        deptData[dept] = data  # setting data according to course abbrev
 
 # output test
 # for key, value in courseData.items():
