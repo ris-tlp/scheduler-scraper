@@ -15,7 +15,6 @@ def getDepartments():
     for value in options.find_all("option"):
         depts.append(value.get("value"))
 
-    print(depts[1:])
     return depts[1:]
 
 
