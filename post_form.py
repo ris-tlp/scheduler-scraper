@@ -3,7 +3,7 @@ from bs4 import BeautifulSoup
 import requests
 
 depts = getDepartments()
-terms = getTerms(2)
+terms = getTerms()
 __VIEWSTATEGENERATOR, __VIEWSTATE, __EVENTVALIDATION = getFormAttributes()
 deptData = {}
 
@@ -35,8 +35,8 @@ for term in terms:
         deptData[dept] = data  # setting data according to course abbrev
 
 # output test
-for key, value in deptData.items():
-    print(f' ----------  {key}  ---------- ')
-    for _ in value:
-        print(_)
-print(f'------------------- {term} -------------------')
+# for key, value in deptData.items():
+#     print(f' ----------  {key}  ---------- ')
+#     for _ in value:
+#         print(_)
+# print(f'------------------- {term} -------------------')
