@@ -1,12 +1,11 @@
 from bs4 import BeautifulSoup
 import requests
 
+url = "https://registrar.kfupm.edu.sa/CourseOffering"
+response = requests.get(url)
+soup = BeautifulSoup(response.text, 'html.parser')
+
 def returnCourses():
-    url = "https://registrar.kfupm.edu.sa/CourseOffering"
-
-    response = requests.get(url)
-    soup = BeautifulSoup(response.text, 'html.parser')
-
     options = soup.find(id = "CntntPlcHldr_ddlDept")
     courses = []
 
@@ -16,11 +15,6 @@ def returnCourses():
     return(courses)
 
 def returnFormAttributes():
-    url = "https://registrar.kfupm.edu.sa/CourseOffering"
-
-    response = requests.get(url)
-    soup = BeautifulSoup(response.text, 'html.parser')
-
     __VIEWSTATEGENERATOR = soup.find("input", id = "__VIEWSTATEGENERATOR").get("value")
     __VIEWSTATE = soup.find("input", id = "__VIEWSTATE").get("value")
     __EVENTVALIDATION = soup.find("input", id = "__EVENTVALIDATION").get("value")

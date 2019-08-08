@@ -31,11 +31,7 @@ for course in courses:
     courseData[course] = data #setting data according to course abbrev
 
 # output test
-for key, value in courseData.items():
-    print(f'----------  {key}  ---------- ')
-    for _ in value:
-        print(_)
-
-print(__VIEWSTATE)
-print(__VIEWSTATEGENERATOR)
-print(__EVENTVALIDATION)
+# for key, value in courseData.items():
+#     print(f'----------  {key}  ---------- ')
+#     for _ in value:
+#         print(_)
