@@ -43,9 +43,10 @@ for term in terms:
                 # appending to end of list
                 data[len(data) - 1].append(tagContent)
                 numberOfCourses += 1
+            
+            logging.info(f"{numberOfCourses} {dept} courses scraped")
 
         deptData[dept] = data  # setting data according to course abbrev
-        logging.info(f"{numberOfCourses} {dept} courses scraped")
         time.sleep(5)   
 
 totalTime = datetime.now() - startTime
@@ -57,4 +58,3 @@ logging.info(f"Total script execution time: {totalTime}")
 #     for _ in value:
 #         print(_)
 # print(f'------------------- {term} -------------------')
-
