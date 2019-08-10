@@ -18,7 +18,11 @@ for term in terms:
         }
         url = "https://registrar.kfupm.edu.sa/CourseOffering"
 
-        response = requests.post(url, data=payload)
+        try:
+            response = requests.get(url)
+        except requests.ConnectionError as e:
+            print(f"Error: {e}\n")
+
         soup = BeautifulSoup(response.text, 'html.parser')
         data = []
 
@@ -34,8 +38,10 @@ for term in terms:
         deptData[dept] = data  # setting data according to course abbrev
 
 # output test
+
 for key, value in deptData.items():
     print(f' ----------  {key}  ---------- ')
     for _ in value:
         print(_)
 print(f'------------------- {term} -------------------')
+

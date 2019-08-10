@@ -4,12 +4,11 @@ url = "https://pypi.org/simple"
 verify_ssl = true
 
 [dev-packages]
-pylint = "*"
-rope = "*"
 
 [packages]
-beautifulsoup4 = "*"
 requests = "*"
+beautifulsoup4 = "*"
+pylint = "*"
 
 [requires]
-python_version = "3.6"
+python_version = "3.7"

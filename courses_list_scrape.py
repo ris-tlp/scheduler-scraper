@@ -2,7 +2,12 @@ from bs4 import BeautifulSoup
 import requests
 
 url = "https://registrar.kfupm.edu.sa/CourseOffering"
-response = requests.get(url)
+
+try:
+    response = requests.get(url)
+except requests.ConnectionError as e:
+    print(f"\nError: {e}\n")
+    
 soup = BeautifulSoup(response.text, 'html.parser')
 
 
