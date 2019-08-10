@@ -26,17 +26,18 @@ for term in terms:
             data.append([])  # creating list of lists of each course
 
             for inner in row.find_all("div", class_="tdata"):
-                index = inner.text.index(":")
-                # slicing to get only content
-                tagContent = inner.text[index+1:]
+                # splitting to get only content
+                tagContent = inner.text.split(":")[1]
                 # appending to end of list
                 data[len(data) - 1].append(tagContent)
 
         deptData[dept] = data  # setting data according to course abbrev
 
 # output test
-    for key, value in deptData.items():
-        print(f' ----------  {key}  ---------- ')
-        for _ in value:
-            print(_)
-    print(f'------------------- {term} -------------------')
+
+for key, value in deptData.items():
+    print(f' ----------  {key}  ---------- ')
+    for _ in value:
+        print(_)
+print(f'------------------- {term} -------------------')
+
