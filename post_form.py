@@ -2,6 +2,8 @@ from courses_list_scrape import getDepartments, getFormAttributes, getTerms
 from bs4 import BeautifulSoup
 import requests
 import logging
+from datetime import datetime
+import time
 
 logging.basicConfig(filename="logs.log", level=logging.INFO)
 
@@ -9,6 +11,8 @@ depts = getDepartments()
 terms = getTerms()
 __VIEWSTATEGENERATOR, __VIEWSTATE, __EVENTVALIDATION = getFormAttributes()
 deptData = {}
+startTime = datetime.now() #to log script execution time
+logging.info(f"Script execution started: {startTime}")
 
 for term in terms:
     for dept in depts:
@@ -22,7 +26,7 @@ for term in terms:
         url = "https://registrar.kfupm.edu.sa/CourseOffering"
 
         try:
-            response = requests.get(url)
+            response = requests.post(url, data=payload)
         except requests.RequestException as e:
             logging.error(e)
 
@@ -31,20 +35,26 @@ for term in terms:
 
         for row in soup.find_all("div", class_="trow"):
             data.append([])  # creating list of lists of each course
+            numberOfCourses = 0
 
             for inner in row.find_all("div", class_="tdata"):
                 # splitting to get only content
                 tagContent = inner.text.split(":")[1]
                 # appending to end of list
                 data[len(data) - 1].append(tagContent)
+                numberOfCourses += 1
 
         deptData[dept] = data  # setting data according to course abbrev
+        logging.info(f"{numberOfCourses} {dept} courses scraped")
+        time.sleep(5)   
 
+totalTime = datetime.now() - startTime
+logging.info(f"Total script execution time: {totalTime}")
 # output test
-
-for key, value in deptData.items():
-    print(f' ----------  {key}  ---------- ')
-    for _ in value:
-        print(_)
-print(f'------------------- {term} -------------------')
+# print(deptData)
+# for key, value in deptData.items():
+#     print(f' ----------  {key}  ---------- ')
+#     for _ in value:
+#         print(_)
+# print(f'------------------- {term} -------------------')
 
