@@ -1,12 +1,14 @@
 from bs4 import BeautifulSoup
 import requests
+import logging
 
+logging.basicConfig(filename="logs.log", level=logging.INFO)
 url = "https://registrar.kfupm.edu.sa/CourseOffering"
 
 try:
     response = requests.get(url)
-except requests.ConnectionError as e:
-    print(f"\nError: {e}\n")
+except requests.RequestException as e:
+    logging.error(e)
     
 soup = BeautifulSoup(response.text, 'html.parser')
 

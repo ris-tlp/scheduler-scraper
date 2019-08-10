@@ -1,6 +1,9 @@
 from courses_list_scrape import getDepartments, getFormAttributes, getTerms
 from bs4 import BeautifulSoup
 import requests
+import logging
+
+logging.basicConfig(filename="logs.log", level=logging.INFO)
 
 depts = getDepartments()
 terms = getTerms()
@@ -20,8 +23,8 @@ for term in terms:
 
         try:
             response = requests.get(url)
-        except requests.ConnectionError as e:
-            print(f"Error: {e}\n")
+        except requests.RequestException as e:
+            logging.error(e)
 
         soup = BeautifulSoup(response.text, 'html.parser')
         data = []
