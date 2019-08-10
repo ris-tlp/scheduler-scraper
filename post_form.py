@@ -8,7 +8,7 @@ __VIEWSTATEGENERATOR, __VIEWSTATE, __EVENTVALIDATION = getFormAttributes()
 deptData = {}
 
 for term in terms:
-    for dept in depts[:2]:
+    for dept in depts:
         payload = {
             '__VIEWSTATE': __VIEWSTATE,
             '__VIEWSTATEGENERATOR': __VIEWSTATEGENERATOR,
@@ -35,8 +35,8 @@ for term in terms:
         deptData[dept] = data  # setting data according to course abbrev
 
 # output test
-# for key, value in deptData.items():
-#     print(f' ----------  {key}  ---------- ')
-#     for _ in value:
-#         print(_)
-# print(f'------------------- {term} -------------------')
+    for key, value in deptData.items():
+        print(f' ----------  {key}  ---------- ')
+        for _ in value:
+            print(_)
+    print(f'------------------- {term} -------------------')
