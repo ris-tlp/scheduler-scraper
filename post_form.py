@@ -18,7 +18,11 @@ for term in terms:
         }
         url = "https://registrar.kfupm.edu.sa/CourseOffering"
 
-        response = requests.post(url, data=payload)
+        try:
+            response = requests.get(url)
+        except requests.ConnectionError as e:
+            print(f"Error: {e}\n")
+
         soup = BeautifulSoup(response.text, 'html.parser')
         data = []
 
