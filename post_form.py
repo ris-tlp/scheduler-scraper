@@ -32,25 +32,27 @@ for term in terms:
 
         soup = BeautifulSoup(response.text, 'html.parser')
         data = []
+        numberOfCourses = 0
 
         for row in soup.find_all("div", class_="trow"):
-            data.append([])  # creating list of lists of each course
-            numberOfCourses = 0
+            data.append([])  # creating list of lists of each course    
 
             for inner in row.find_all("div", class_="tdata"):
                 # splitting to get only content
                 tagContent = inner.text.split(":")[1]
                 # appending to end of list
                 data[len(data) - 1].append(tagContent)
-                numberOfCourses += 1
+        
+            numberOfCourses += 1
             
-            logging.info(f"{numberOfCourses} {dept} courses scraped")
-
+            
+        logging.info(f"{numberOfCourses} {dept} courses scraped")
         deptData[dept] = data  # setting data according to course abbrev
         time.sleep(5)   
 
 totalTime = datetime.now() - startTime
 logging.info(f"Total script execution time: {totalTime}")
+
 # output test
 # print(deptData)
 # for key, value in deptData.items():
