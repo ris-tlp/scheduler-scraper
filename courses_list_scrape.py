@@ -4,9 +4,10 @@ import logging
 
 logging.basicConfig(filename="logs.log", level=logging.INFO)
 url = "https://registrar.kfupm.edu.sa/CourseOffering"
+session = requests.Session() # session to reuse the same TCP connection accross requests
 
 try:
-    response = requests.get(url)
+    response = session.get(url)
 except requests.RequestException as e:
     logging.error(e)
     
