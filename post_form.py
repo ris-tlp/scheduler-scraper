@@ -15,6 +15,7 @@ startTime = datetime.now() #to log script execution time
 logging.info(f"Script execution started: {startTime}")
 
 for term in terms:
+    logging.error(term)
     for dept in depts:
         payload = {
             '__VIEWSTATE': __VIEWSTATE,
@@ -35,20 +36,27 @@ for term in terms:
         numberOfCourses = 0
 
         for row in soup.find_all("div", class_="trow"):
-            data.append([])  # creating list of lists of each course    
+            data.append({})  # creating list of dictonaries of each course    
 
             for inner in row.find_all("div", class_="tdata"):
-                # splitting to get only content
-                tagContent = inner.text.split(":")[1]
-                # appending to end of list
-                data[len(data) - 1].append(tagContent)
+                #setting up dictionary with keys & values
+                data[len(data) - 1][inner.text.split(":")[0]] = inner.text.split(":")[1]
+                #splitting course name and sections        
+                data[len(data) - 1]["Section"], data[len(data) - 1]["Course"] = (
+                data[len(data) - 1]["Course-Sec"].split("-")[1],
+                data[len(data) - 1]["Course-Sec"].split("-")[0]
+            )
         
             numberOfCourses += 1
+            #removing redundant key    
+            data[len(data) - 1].pop("Course-Sec", None)
+            data[len(data) - 1]["Term"] = term
+            data[len(data) - 1]["Dept"] = dept
             
             
         logging.info(f"{numberOfCourses} {dept} courses scraped")
         deptData[dept] = data  # setting data according to course abbrev
-        time.sleep(5)   
+        # time.sleep(5)   
 
 totalTime = datetime.now() - startTime
 logging.info(f"Total script execution time: {totalTime}")
@@ -60,3 +68,5 @@ logging.info(f"Total script execution time: {totalTime}")
 #     for _ in value:
 #         print(_)
 # print(f'------------------- {term} -------------------')
+
+print(deptData)
