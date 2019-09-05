@@ -11,8 +11,10 @@ depts = getDepartments()
 terms = getTerms()
 __VIEWSTATEGENERATOR, __VIEWSTATE, __EVENTVALIDATION = getFormAttributes()
 deptData = {}
-startTime = datetime.now() #to log script execution time
+startTime = datetime.now()  # to log script execution time
 logging.info(f"Script execution started: {startTime}")
+# session to reuse the same TCP connection accross requests
+session = requests.Session()
 
 for term in terms:
     logging.error(term)
@@ -27,7 +29,7 @@ for term in terms:
         url = "https://registrar.kfupm.edu.sa/CourseOffering"
 
         try:
-            response = requests.post(url, data=payload)
+            response = session.post(url, data=payload)
         except requests.RequestException as e:
             logging.error(e)
 
