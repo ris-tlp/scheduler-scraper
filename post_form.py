@@ -10,7 +10,7 @@ logging.basicConfig(filename="logs.log", level=logging.INFO)
 depts = getDepartments()
 terms = getTerms()
 __VIEWSTATEGENERATOR, __VIEWSTATE, __EVENTVALIDATION = getFormAttributes()
-deptData = {}
+deptData = []
 startTime = datetime.now()  # to log script execution time
 logging.info(f"Script execution started: {startTime}")
 # session to reuse the same TCP connection accross requests
@@ -18,7 +18,7 @@ session = requests.Session()
 
 def getDBData():
     for term in terms:
-        logging.error(term)
+        logging.info(term)
         for dept in depts:
             payload = {
                 '__VIEWSTATE': __VIEWSTATE,
@@ -58,10 +58,10 @@ def getDBData():
                 
                 
             logging.info(f"{numberOfCourses} {dept} courses scraped")
-            deptData[dept] = data  # setting data according to course abbrev
+            deptData.append(data)  # setting data according to course abbrev
             # time.sleep(5)   
 
-            return deptData
+    return deptData
 
 totalTime = datetime.now() - startTime
 logging.info(f"Total script execution time: {totalTime}")
