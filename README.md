@@ -12,6 +12,9 @@ Returns a dictionary which contains the name of majors as a key and a list of li
 `pipenv shell`  
 Uncomment the "output test" lines if you want to see the output and `python3 post_form.py`  
 
+## import.py
+Script to import data to the database. Requires SQLAlchemy and MySQLConnector which can be installed through pipenv
+
 ## Sample output
 ```
 ----------  CEM  ---------- 
