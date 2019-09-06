@@ -9,6 +9,8 @@ verify_ssl = true
 requests = "*"
 beautifulsoup4 = "*"
 pylint = "*"
+sqlalchemy = "*"
+mysql-connector = "*"
 
 [requires]
 python_version = "3.7"
