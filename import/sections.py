@@ -14,11 +14,10 @@ class Sections(Base):
     start_time = Column(Integer, nullable=False)
     end_time = Column(Integer, nullable=False)
     status = Column(Integer, nullable=False)
-    course_id = Column(Integer, ForeignKey("courses.id"), nullable=False)
+    course_id = Column(Integer, ForeignKey("courses.id"))
 
 
-    def __init__(self, id, number, instructor, activity, days, building, room, start_time, end_time, status, course_id):
-        self.id = id
+    def __init__(self, number, instructor, activity, days, building, room, start_time, end_time, status):
         self.number = number
         self.instructor = instructor
         self.activity = activity
@@ -28,9 +27,8 @@ class Sections(Base):
         self.start_time = start_time
         self.end_time = end_time
         self.status = status
-        self.course_id = course_id
 
-
+# RAW QUERY
 #   query = (
 #         "CREATE TABLE Sections ("
 #         "id INT NOT NULL AUTO_INCREMENT,"

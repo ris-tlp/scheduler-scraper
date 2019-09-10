@@ -1,4 +1,5 @@
 from sqlalchemy import Column, Integer, String
+from sqlalchemy.orm import relationship
 from base import Base
 
 class Courses(Base):
@@ -9,6 +10,7 @@ class Courses(Base):
     title = Column(String(length=255), nullable=False)
     term = Column(String(length=255), nullable=False)
     major = Column(String(length=255), nullable=False)
+    # sections = relationship("Sections")
 
     def __init__(self, code, title, term, major):
         self.code = code
@@ -16,6 +18,7 @@ class Courses(Base):
         self.term = term
         self.major = major
 
+# RAW QUERY
 # query = (
 #         "CREATE TABLE Courses ("
 #         "id INT NOT NULL AUTO_INCREMENT,"
