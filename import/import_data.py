@@ -19,14 +19,14 @@ for dept in data:
             course["Term"],
             course["Dept"]
         )
-        
+
         querySections = Sections(
-            course["Course"],
+            course["Section"],
+            course["CRN"],
             course["Instructor"],
             course["Activity"],
             course["Day"],
-            course["Loc"].split("-")[0],
-            course["Loc"].split("-")[1],
+            course["Loc"],
             course["Time"].split("-")[0],
             course["Time"].split("-")[1],
             course["Status"]
