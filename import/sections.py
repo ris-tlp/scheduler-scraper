@@ -1,29 +1,30 @@
 from sqlalchemy import Column, Integer, String, ForeignKey
 from base import Base
 
+
 class Sections(Base):
     __tablename__ = "sections"
 
     id = Column(Integer, primary_key=True)
+    crn = Column(Integer, nullable=False)
     number = Column(Integer, nullable=False)
-    instructor = Column(String(length=255), nullable=False)
+    instructor = Column(String(length=255), nullable=True)
     activity = Column(String(length=255), nullable=False)
     days = Column(String(length=5), nullable=False)
-    building = Column(String(length=255), nullable=False)
-    room = Column(String(length=255), nullable=False)
+    location = Column(String(length=255), nullable=True)
     start_time = Column(Integer, nullable=False)
     end_time = Column(Integer, nullable=False)
-    status = Column(Integer, nullable=False)
+    status = Column(String(length=255), nullable=False)
     course_id = Column(Integer, ForeignKey("courses.id"))
 
 
-    def __init__(self, number, instructor, activity, days, building, room, start_time, end_time, status):
+    def __init__(self, crn, number, instructor, activity, days, location, start_time, end_time, status):
+        self.crn = crn
         self.number = number
         self.instructor = instructor
         self.activity = activity
         self.days = days
-        self.building = building
-        self.room = room
+        self.location = location
         self.start_time = start_time
         self.end_time = end_time
         self.status = status
