@@ -17,9 +17,9 @@ logging.info(f"Script execution started: {startTime}")
 session = requests.Session()
 
 def getDBData():
-    for term in terms:
+    for term in terms[:2]:
         logging.info(term)
-        for dept in depts:
+        for dept in depts[:4]:
             payload = {
                 '__VIEWSTATE': __VIEWSTATE,
                 '__VIEWSTATEGENERATOR': __VIEWSTATEGENERATOR,

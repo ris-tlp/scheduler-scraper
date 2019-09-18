@@ -10,7 +10,8 @@ requests = "*"
 beautifulsoup4 = "*"
 pylint = "*"
 sqlalchemy = "*"
-mysql-connector = "*"
+sqlalchemy-utils = "*"
+pymysql = "*"
 
 [requires]
 python_version = "3.7"
