@@ -1,4 +1,5 @@
 from sqlalchemy import Column, Integer, String, ForeignKey
+from sqlalchemy.orm import relationship
 from base import Base
 
 class Sections(Base):
@@ -15,6 +16,7 @@ class Sections(Base):
     end_time = Column(Integer, nullable=False)
     status = Column(Integer, nullable=False)
     course_id = Column(Integer, ForeignKey("courses.id"))
+    courses = relationship("Courses", back_populates="sections", primaryjoin=courses.id==course_id)
 
 
     def __init__(self, number, instructor, activity, days, building, room, start_time, end_time, status):

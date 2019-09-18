@@ -65,7 +65,6 @@ def getDBData():
 
 totalTime = datetime.now() - startTime
 logging.info(f"Total script execution time: {totalTime}")
-
 # output test
 # print(deptData)
 # for key, value in deptData.items():
