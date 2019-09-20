@@ -58,13 +58,15 @@ def getDBData():
                 
                 
             logging.info(f"{numberOfCourses} {dept} courses scraped")
-            deptData.append(data)  # setting data according to course abbrev
+            # deptData.append(data)  # setting data according to course abbrev
             # time.sleep(5)   
+            print(data)
 
-    return deptData
+    # return deptData
 
 totalTime = datetime.now() - startTime
 logging.info(f"Total script execution time: {totalTime}")
+getDBData()
 # output test
 # print(deptData)
 # for key, value in deptData.items():

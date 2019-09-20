@@ -10,7 +10,7 @@ class Courses(Base):
     title = Column(String(length=255), nullable=False)
     term = Column(String(length=255), nullable=False)
     major = Column(String(length=255), nullable=False)
-    # sections = relationship("Sections")
+    sections = relationship("Sections", back_populates="courses")
 
     def __init__(self, code, title, term, major):
         self.code = code

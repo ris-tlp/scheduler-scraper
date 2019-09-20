@@ -11,7 +11,7 @@ logging.basicConfig(filename="logs.log", level=logging.INFO)
 engine = create_engine("mysql+mysqlconnector://omar:omar@localhost/test")
 db = scoped_session(sessionmaker(bind=engine))
 
-# deptData = getDBData()
+deptData = getDBData()
 tables = ["Sections", "Courses"]
 
 def checkTableExists(db, tableName):
@@ -27,19 +27,19 @@ def checkTableExists(db, tableName):
     else:
         return False
 
-#FOR TESTING PURPOSES ONLY
-# def dropTables(tables: list):
-#     for table in tables:
-#         db.execute(f"DROP TABLE {table};")
-#         db.commit()
-#     logging.info("Tables dropped")
+# FOR TESTING PURPOSES ONLY
+def dropTables(tables: list):
+    for table in tables:
+        db.execute(f"DROP TABLE {table};")
+        db.commit()
+    logging.info("Tables dropped")
 
-# dropTables(tables)
+dropTables(tables)
 
 if not checkTableExists(db=db, tableName="Courses"):
     query = (
         "CREATE TABLE Courses ("
-        "id INT NOT NULL,"
+        "id INT NOT NULL AUTO_INCREMENT,"
         "code INT NOT NULL,"
         "title VARCHAR(255) NOT NULL,"
         "term VARCHAR(255) NOT NULL,"
@@ -53,7 +53,7 @@ if not checkTableExists(db=db, tableName="Courses"):
 if not checkTableExists(db=db, tableName="Sections"):
     query = (
         "CREATE TABLE Sections ("
-        "id INT NOT NULL,"
+        "id INT NOT NULL AUTO_INCREMENT,"
         "number INT NOT NULL,"
         "instructor VARCHAR(255) NOT NULL,"
         "activity VARCHAR(255) NOT NULL,"
@@ -70,3 +70,32 @@ if not checkTableExists(db=db, tableName="Sections"):
     db.execute(query)
     db.commit()
     logging.info("CREATED TABLE 'Sections'")
+        
+
+# for key in deptData:
+#     # print(key)
+#     # print("\n\n\n")
+#     for k, v in key.items():
+#         print(f"{k}: {v}\n")
+#     print("\n\n")
+
+for dept in deptData:
+    for course in dept:
+        # This is right as it gives the dict straight up
+        print(course)
+        print("\n\n")
+
+    # query = (
+    #     'INSERT INTO Courses (code, title, term, major) '
+    #     "VALUES "
+    #     f"('{dept['Course'].split()[1]}', '{dept['Course Name']}', '{dept['Term']}', '{dept['Dept']}');"
+    # )
+    # db.execute(query)
+    # db.commit()
+   
+# for x in deptData[:1]:
+#     for y in x:
+#         print(y)
+#         for z, z1 in y.items():
+#             print(f"{z}: {z1}\n")
+#     print("\n")
