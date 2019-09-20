@@ -1,4 +1,5 @@
 from scraper import Scraper
+from courses import Course
 
 s = Scraper()
 courses = []

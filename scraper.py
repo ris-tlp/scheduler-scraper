@@ -5,6 +5,7 @@ import logging
 
 logging.basicConfig(filename="logs.log", level=logging.INFO)
 
+
 class Scraper():
 
     def __init__(self):
@@ -23,25 +24,24 @@ class Scraper():
 
         self.soup = BeautifulSoup(response.text, 'html.parser')
 
-
     def setDepartments(self):
         '''Initializes dept with all available departments'''
 
         options = self.soup.find(id="CntntPlcHldr_ddlDept")
 
         for value in options.find_all("option"):
-            self.depts.append(value.get("value"))
-            
+            self.depts.append(value.get("value"))      
 
     def setFormAttributes(self):
         '''Initializes form attributes necessary for submission'''
 
         self.__VIEWSTATEGENERATOR = self.soup.find(
             "input", id="__VIEWSTATEGENERATOR").get("value")
-        self.__VIEWSTATE = self.soup.find("input", id="__VIEWSTATE").get("value")
-        self.__EVENTVALIDATION = self.soup.find("input", id="__EVENTVALIDATION").get("value")
+        self.__VIEWSTATE = self.soup.find(
+            "input", id="__VIEWSTATE").get("value")
+        self.__EVENTVALIDATION = self.soup.find(
+            "input", id="__EVENTVALIDATION").get("value")
 
-    
     def setTerms(self, limit=3):
         '''Initializes term with the 3 most recent terms'''
 
@@ -49,19 +49,20 @@ class Scraper():
         #     self.terms.append(term.get("value"))
 
         [
-            self.terms.append(term.get("value")) 
-            for term in self.soup.find(id="CntntPlcHldr_ddlTerm").find_all("option")
-        ]    
+            self.terms.append(term.get("value"))
+            for term
+            in self.soup.find(id="CntntPlcHldr_ddlTerm").find_all("option")
+        ]
 
         self.terms = self.terms[:limit]
 
     def getCourseData(self, courses: list) -> list:
         """
-        Scrapes the KFUPM Course offering page and returns a 
-        courses list containing course objects 
-        """      
+        Scrapes the KFUPM Course offering page and returns a
+        courses list containing course objects
+        """
 
-        # Initializing necessary attributes 
+        # Initializing necessary attributes
         self.setTerms()
         self.setDepartments()
         self.setFormAttributes()
@@ -89,7 +90,7 @@ class Scraper():
                 previousCourse = None
 
                 for row in soup.find_all("div", class_="trow"):
-                    # creates a new dictionary to store the 
+                    # creates a new dictionary to store the
                     # attributes of a course
                     data.append({})
 
@@ -98,29 +99,29 @@ class Scraper():
                         # setting up dictionary with keys & values
                         data[len(data) - 1][inner.text.split(":")[0]] = inner.text.split(":")[1]
                         # splitting course name and sections
-                        # as required by the schema     
+                        # as required by the schema
                         data[len(data) - 1]["Section"], data[len(data) - 1]["Course"] = (
-                        data[len(data) - 1]["Course-Sec"].split("-")[1],
-                        data[len(data) - 1]["Course-Sec"].split("-")[0]
-                    )
+                            data[len(data) - 1]["Course-Sec"].split("-")[1],
+                            data[len(data) - 1]["Course-Sec"].split("-")[0]
+                        )
 
                     numberOfCourses += 1
-                    # removing redundant key    
+                    # removing redundant key
                     data[len(data) - 1].pop("Course-Sec", None)
 
                     # storing name of latest course scraped
                     # to check whether the previous course that was
-                    # scraped is the same so as to only append a 
+                    # scraped is the same so as to only append a
                     # new section to the course object
                     currentCourse = data[len(data) - 1]["Course"]
 
-                    # If the previous course is not the same as 
+                    # If the previous course is not the same as
                     # the course scraped next, create a new
                     # course object and append it to the courses list,
                     # otherwise only create a new section object and
                     # append it to courses.sections
                     if (previousCourse is None) or (previousCourse != currentCourse):
-                        section = Section (
+                        section = Section(
                             data[len(data) - 1]["Section"],
                             data[len(data) - 1]["CRN"],
                             data[len(data) - 1]["Instructor"],
@@ -136,7 +137,7 @@ class Scraper():
                         sections = []
                         sections.append(section)
 
-                        course = Course (
+                        course = Course(
                             dept,
                             term,
                             data[len(data) - 1]["Course"],
@@ -149,7 +150,7 @@ class Scraper():
                         previousCourse = currentCourse
 
                     else:
-                        section = Section (
+                        section = Section(
                             data[len(data) - 1]["Section"],
                             data[len(data) - 1]["CRN"],
                             data[len(data) - 1]["Instructor"],
@@ -167,7 +168,5 @@ class Scraper():
                         courses[len(courses) - 1].sections.append(section)
 
                     courses.append(course)
-                    
+
         return courses
-
-
