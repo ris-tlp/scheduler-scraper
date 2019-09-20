@@ -23,7 +23,7 @@ class Course:
 
 class Section:
     """
-    Stores attributes that are unique to a single question.
+    Stores attributes that are unique to a single section.
     A single question can only have a single course.
     """
 
