@@ -3,7 +3,7 @@ from courses import Course
 
 s = Scraper()
 courses = {}
-courses = s.getCourseData(courses)
+courses = s.getData(courses)
 
 
 #     print(course.__dict__)

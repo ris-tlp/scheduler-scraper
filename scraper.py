@@ -52,8 +52,33 @@ class Scraper():
         ]
 
         self.terms = self.terms[:limit]
+        
+    def setPayload(self, term, dept) -> dict:
+        
+        self.setFormAttributes()
+        payload = {
+            '__VIEWSTATE': self.__VIEWSTATE,
+            '__VIEWSTATEGENERATOR': self.__VIEWSTATEGENERATOR,
+            '__EVENTVALIDATION': self.__EVENTVALIDATION,
+            'ctl00$CntntPlcHldr$ddlTerm': term,
+            'ctl00$CntntPlcHldr$ddlDept': dept
+        }
+        
+        return payload
+        
+    def getCourseData(self, row) -> dict:
+        '''Iterates and initializes attributes of ONE course'''
+        
+        data = {}
+        
+        for inner in row.find_all("div", class_="tdata"):
+            key, value = inner.text.split(":")
+            data[key] = value
 
-    def getCourseData(self, courses: dict) -> list:
+        return data
+
+            
+    def getData(self, courses: dict) -> list:
         """
         Scrapes the KFUPM Course offering page and returns a
         courses list containing course objects
@@ -67,17 +92,9 @@ class Scraper():
         for term in self.terms[:2]:
             logging.info(term)
             for dept in self.depts[:4]:
-
-                payload = {
-                    '__VIEWSTATE': self.__VIEWSTATE,
-                    '__VIEWSTATEGENERATOR': self.__VIEWSTATEGENERATOR,
-                    '__EVENTVALIDATION': self.__EVENTVALIDATION,
-                    'ctl00$CntntPlcHldr$ddlTerm': term,
-                    'ctl00$CntntPlcHldr$ddlDept': dept
-                }
-
+                
                 try:
-                    response = self.session.post(self.url, data=payload)
+                    response = self.session.post(self.url, data=self.setPayload(term, dept))
                 except requests.RequestException as e:
                     logging.error(e)
 
@@ -86,26 +103,19 @@ class Scraper():
                 previousCourse = None
 
                 for row in soup.find_all("div", class_="trow"):
-                    # creates a new dictionary to store the
-                    # attributes of a course
-                    data = {}
-
-                    # iterates through attributes of ONE course
-                    for inner in row.find_all("div", class_="tdata"):
-                        # setting up dictionary with keys & values                        
-                        key, value = inner.text.split(":")
-                        data[key] = value
+                    # fetch data of ONE course
+                    data = self.getCourseData(row)
                         
-                        # splitting course name and sections
-                        # as required by the schema
-                        data["Section"], data["Course"] = (
-                            data["Course-Sec"].split("-")[1],
-                            data["Course-Sec"].split("-")[0]
-                        )
+                    # splitting course name and sections
+                    # as required by the schema
+                    data["Section"], data["Course"] = (
+                        data["Course-Sec"].split("-")[1],
+                        data["Course-Sec"].split("-")[0]
+                    )
                     
-                    numberOfCourses += 1
                     # removing redundant key
                     data.pop("Course-Sec", None)
+                    numberOfCourses += 1
                                         
                     # storing name and term of latest course scraped
                     # to check whether the previous course that was
