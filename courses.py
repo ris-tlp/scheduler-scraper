@@ -42,13 +42,13 @@ class Section:
     def __str__(self):
         return (
             f"Number: {self.number}"
-            f"CRN:  {self.crn}"
-            f"Instructor: {self.instructor}"
-            f"Activity: {self.activtiy}"
-            f"Days: {self.days}"
-            f"Building: {self.bldg}"
-            f"Room: {self.room}"
-            f"Start time: {self.start_time}"
-            f"End time: {self.end_time}"
-            f"Status: {self.status}"
+            f"\nCRN:  {self.crn}"
+            f"\nInstructor: {self.instructor}"
+            f"\nActivity: {self.activtiy}"
+            f"\nDays: {self.days}"
+            f"\nBuilding: {self.bldg}"
+            f"\nRoom: {self.room}"
+            f"\nStart time: {self.start_time}"
+            f"\nEnd time: {self.end_time}"
+            f"\nStatus: {self.status}"
         )

@@ -45,9 +45,6 @@ class Scraper():
     def setTerms(self, limit=3):
         '''Initializes term with the 3 most recent terms'''
 
-        # for term in self.soup.find(id="CntntPlcHldr_ddlTerm").find_all("option"):
-        #     self.terms.append(term.get("value"))
-
         [
             self.terms.append(term.get("value"))
             for term
@@ -56,7 +53,7 @@ class Scraper():
 
         self.terms = self.terms[:limit]
 
-    def getCourseData(self, courses: list) -> list:
+    def getCourseData(self, courses: dict) -> list:
         """
         Scrapes the KFUPM Course offering page and returns a
         courses list containing course objects
@@ -85,53 +82,53 @@ class Scraper():
                     logging.error(e)
 
                 soup = BeautifulSoup(response.text, 'html.parser')
-                data = []
                 numberOfCourses = 0
                 previousCourse = None
 
                 for row in soup.find_all("div", class_="trow"):
                     # creates a new dictionary to store the
                     # attributes of a course
-                    data.append({})
+                    data = {}
 
                     # iterates through attributes of ONE course
                     for inner in row.find_all("div", class_="tdata"):
-                        # setting up dictionary with keys & values
-                        data[len(data) - 1][inner.text.split(":")[0]] = inner.text.split(":")[1]
+                        # setting up dictionary with keys & values                        
+                        key, value = inner.text.split(":")
+                        data[key] = value
+                        
                         # splitting course name and sections
                         # as required by the schema
-                        data[len(data) - 1]["Section"], data[len(data) - 1]["Course"] = (
-                            data[len(data) - 1]["Course-Sec"].split("-")[1],
-                            data[len(data) - 1]["Course-Sec"].split("-")[0]
+                        data["Section"], data["Course"] = (
+                            data["Course-Sec"].split("-")[1],
+                            data["Course-Sec"].split("-")[0]
                         )
-
+                    
                     numberOfCourses += 1
                     # removing redundant key
-                    data[len(data) - 1].pop("Course-Sec", None)
-
-                    # storing name of latest course scraped
+                    data.pop("Course-Sec", None)
+                                        
+                    # storing name and term of latest course scraped
                     # to check whether the previous course that was
                     # scraped is the same so as to only append a
                     # new section to the course object
-                    currentCourse = data[len(data) - 1]["Course"]
+                    courseID = data["Course"] + term
 
-                    # If the previous course is not the same as
-                    # the course scraped next, create a new
-                    # course object and append it to the courses list,
+                    # If the mew course does not already exist, create a new
+                    # course object and append it to the courses dict,
                     # otherwise only create a new section object and
                     # append it to courses.sections
-                    if (previousCourse is None) or (previousCourse != currentCourse):
+                    if (courseID not in courses):
                         section = Section(
-                            data[len(data) - 1]["Section"],
-                            data[len(data) - 1]["CRN"],
-                            data[len(data) - 1]["Instructor"],
-                            data[len(data) - 1]["Activity"],
-                            data[len(data) - 1]["Day"],
-                            data[len(data) - 1]["Loc"].split("-")[0],
-                            data[len(data) - 1]["Loc"].split("-")[1],
-                            data[len(data) - 1]["Time"].split("-")[0],
-                            data[len(data) - 1]["Time"].split("-")[1],
-                            data[len(data) - 1]["Status"]
+                            data["Section"],
+                            data["CRN"],
+                            data["Instructor"],
+                            data["Activity"],
+                            data["Day"],
+                            data["Loc"].split("-")[0],
+                            data["Loc"].split("-")[1],
+                            data["Time"].split("-")[0],
+                            data["Time"].split("-")[1],
+                            data["Status"]
                         )
                         
                         sections = []
@@ -140,33 +137,30 @@ class Scraper():
                         course = Course(
                             dept,
                             term,
-                            data[len(data) - 1]["Course"],
-                            data[len(data) - 1]["Course Name"],
+                            data["Course"],
+                            data["Course Name"],
                             sections
                         )
 
-                        # Changing the previous course so as to indicate
-                        # that a new course object must be created
-                        previousCourse = currentCourse
-
                     else:
                         section = Section(
-                            data[len(data) - 1]["Section"],
-                            data[len(data) - 1]["CRN"],
-                            data[len(data) - 1]["Instructor"],
-                            data[len(data) - 1]["Activity"],
-                            data[len(data) - 1]["Day"],
-                            data[len(data) - 1]["Loc"].split("-")[0],
-                            data[len(data) - 1]["Loc"].split("-")[1],
-                            data[len(data) - 1]["Time"].split("-")[0],
-                            data[len(data) - 1]["Time"].split("-")[1],
-                            data[len(data) - 1]["Status"]
+                            data["Section"],
+                            data["CRN"],
+                            data["Instructor"],
+                            data["Activity"],
+                            data["Day"],
+                            data["Loc"].split("-")[0],
+                            data["Loc"].split("-")[1],
+                            data["Time"].split("-")[0],
+                            data["Time"].split("-")[1],
+                            data["Status"]
                         )
 
                         # Only appends the new section of the same course
                         # to courses.section
-                        courses[len(courses) - 1].sections.append(section)
-
-                    courses.append(course)
+                        courses[courseID].sections.append(section)
+                        
+                    # Set course to unique courseID
+                    courses[courseID] = course
 
         return courses
