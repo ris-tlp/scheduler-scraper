@@ -1,5 +1,5 @@
 from scraper import Scraper
-from courses import Course
+from courses import Courses, Sections
 
 s = Scraper()
 courses = {}
@@ -10,9 +10,7 @@ courses = s.getData(courses)
 #     for section in course.sections:
 #         print(section.__dict__)
 # print(courses)
-print(courses["AE  402201910"])
-for x in courses["AE  402201910"].sections:
-    print(x)
-    print("\n\n")
+# print(courses)
 
-
+for k, v in courses.items():
+    print(v[1])

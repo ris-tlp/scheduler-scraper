@@ -1,4 +1,4 @@
-from courses import Course, Section
+from courses import Courses, Sections
 from bs4 import BeautifulSoup
 import requests
 import logging
@@ -123,54 +123,50 @@ class Scraper():
                     # new section to the course object
                     courseID = data["Course"] + term
 
-                    # If the mew course does not already exist, create a new
+                    # If the new course does not already exist, create a new
                     # course object and append it to the courses dict,
                     # otherwise only create a new section object and
                     # append it to courses.sections
                     if (courseID not in courses):
-                        section = Section(
-                            data["Section"],
+                        section = Sections(
                             data["CRN"],
+                            data["Section"],
                             data["Instructor"],
                             data["Activity"],
                             data["Day"],
-                            data["Loc"].split("-")[0],
-                            data["Loc"].split("-")[1],
+                            data["Loc"],
                             data["Time"].split("-")[0],
                             data["Time"].split("-")[1],
-                            data["Status"]
+                            data["Status"]                                                        
                         )
                         
                         sections = []
                         sections.append(section)
 
-                        course = Course(
-                            dept,
-                            term,
+                        course = Courses(
                             data["Course"],
                             data["Course Name"],
-                            sections
+                            term,
+                            dept
                         )
 
                     else:
-                        section = Section(
-                            data["Section"],
+                        section = Sections(
                             data["CRN"],
+                            data["Section"],
                             data["Instructor"],
                             data["Activity"],
                             data["Day"],
-                            data["Loc"].split("-")[0],
-                            data["Loc"].split("-")[1],
+                            data["Loc"],
                             data["Time"].split("-")[0],
                             data["Time"].split("-")[1],
-                            data["Status"]
+                            data["Status"]                                                        
                         )
 
                         # Only appends the new section of the same course
-                        # to courses.section
-                        courses[courseID].sections.append(section)
+                        courses[courseID][1].append(section)
                         
                     # Set course to unique courseID
-                    courses[courseID] = course
+                    courses[courseID] = [course, sections]
 
         return courses
