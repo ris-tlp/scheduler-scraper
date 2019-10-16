@@ -11,13 +11,14 @@ class Courses(Base):
     title = Column(String(length=255), nullable=False)
     term = Column(String(length=255), nullable=False)
     major = Column(String(length=255), nullable=False)
-    # sections = relationship("Sections", back_populates="courses")
+    sections = relationship("Sections")
 
-    def __init__(self, code, title, term, major):
+    def __init__(self, code, title, term, major, sections):
         self.code = code
         self.title = title
         self.term = term
         self.major = major
+        self.sections = sections
 
 # RAW QUERY
 # query = (
@@ -46,7 +47,7 @@ class Sections(Base):
     end_time = Column(Integer, nullable=False)
     status = Column(String(length=255), nullable=False)
     course_id = Column(Integer, ForeignKey("courses.id"))
-    # courses = relationship("Courses", back_populates="sections", primaryjoin=courses.id==course_id)
+    courses = relationship("Courses", back_populates="sections")
 
 
     def __init__(self, crn, number, instructor, activity, days, location, start_time, end_time, status):

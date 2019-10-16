@@ -13,4 +13,4 @@ courses = s.getData(courses)
 # print(courses)
 
 for k, v in courses.items():
-    print(v[1])
+    print(v.sections)
