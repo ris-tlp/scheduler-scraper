@@ -1,6 +1,6 @@
 from sqlalchemy import Column, Integer, String, ForeignKey
 from sqlalchemy.orm import relationship
-from base import Base
+from database import Base
 
 
 class Courses(Base):
@@ -19,6 +19,15 @@ class Courses(Base):
         self.term = term
         self.major = major
         self.sections = sections
+        
+    def __str__(self):
+        return (
+            f"Major: {self.major}\n"
+            f"Term: {self.term}\n"
+            f"Code: {self.code}\n"
+            f"Title: {self.title}\n"
+            f"Sections: {self.sections}\n"
+        )
 
 # RAW QUERY
 # query = (
@@ -61,6 +70,19 @@ class Sections(Base):
         self.end_time = end_time
         self.status = status
 
+
+    def __str__(self):
+        return (
+            f"Number: {self.number}"
+            f"\nCRN:  {self.crn}"
+            f"\nInstructor: {self.instructor}"
+            f"\nActivity: {self.activity}"
+            f"\nDays: {self.days}"
+            f"\nLocation: {self.location}"
+            f"\nStart time: {self.start_time}"
+            f"\nEnd time: {self.end_time}"
+            f"\nStatus: {self.status}"
+        )
 # RAW QUERY
 #   query = (
 #         "CREATE TABLE Sections ("

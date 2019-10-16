@@ -10,3 +10,6 @@ if not database_exists(engine.url):
     
 Session = sessionmaker(bind=engine)
 Base = declarative_base()
+
+class Database():
+    '''Handles all operations that concerns Databases'''
