@@ -12,7 +12,7 @@ from sqlalchemy.orm import sessionmaker, relationship
 from sqlalchemy_utils import database_exists, create_database
 
 # TODO: use environment variables for credentials
-engine = create_engine("mysql+pymysql://Ajmal:ASDF0987!@localhost/scheduler", echo=True)
+engine = create_engine("mysql+pymysql://ajmal:ajmal@localhost/scheduler", echo=True)
 if not database_exists(engine.url):
     create_database(engine.url)
 
@@ -35,4 +35,9 @@ class Database:
         courselist = list(courseData.values())
         session.add_all(courselist)
         session.commit()
+
+    def truncate_tables(self):
+        session.execute("""TRUNCATE TABLE sections""")
+        session.execute("""SET FOREIGN_KEY_CHECKS = 0""")
+        session.execute("""TRUNCATE TABLE courses""")
 
