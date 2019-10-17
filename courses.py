@@ -7,11 +7,11 @@ class Courses(Base):
     __tablename__ = "courses"
 
     id = Column(Integer, primary_key=True)
-    code = Column(Integer, nullable=False)
+    code = Column(String(length=255), nullable=False)
     title = Column(String(length=255), nullable=False)
     term = Column(String(length=255), nullable=False)
     major = Column(String(length=255), nullable=False)
-    sections = relationship("Sections")
+    sections = relationship("Sections", backref="Courses")
 
     def __init__(self, code, title, term, major, sections):
         self.code = code
@@ -47,16 +47,15 @@ class Sections(Base):
 
     id = Column(Integer, primary_key=True)
     crn = Column(Integer, nullable=False)
-    number = Column(Integer, nullable=False)
+    number = Column(String(length=255), nullable=False)
     instructor = Column(String(length=255), nullable=True)
     activity = Column(String(length=255), nullable=False)
-    days = Column(String(length=5), nullable=False)
+    days = Column(String(length=5), nullable=True)
     location = Column(String(length=255), nullable=True)
     start_time = Column(Integer, nullable=False)
     end_time = Column(Integer, nullable=False)
     status = Column(String(length=255), nullable=False)
     course_id = Column(Integer, ForeignKey("courses.id"))
-    courses = relationship("Courses", back_populates="sections")
 
 
     def __init__(self, crn, number, instructor, activity, days, location, start_time, end_time, status):

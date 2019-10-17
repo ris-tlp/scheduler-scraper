@@ -112,9 +112,25 @@ class Scraper():
                         data["Course-Sec"].split("-")[1],
                         data["Course-Sec"].split("-")[0]
                     )
+                    # splitting Time as start_time and
+                    # end_time as required by schema
+                    data["start_time"], data["end_time"] = (
+                        data["Time"].split("-")[0],
+                        data["Time"].split("-")[1]
+                    )
                     
-                    # removing redundant key
+                    # setting time as -1 to indicate 
+                    # that the start_time / end_time 
+                    # fields are empty 
+                    if len(data["start_time"]) == 0:
+                        data["start_time"] = -1
+                        
+                    if len(data["end_time"]) == 0:
+                        data["end_time"] = -1
+                    
+                    # removing redundant keys
                     data.pop("Course-Sec", None)
+                    data.pop("Time", None)
                     numberOfCourses += 1
                                         
                     # storing name and term of latest course scraped
@@ -130,8 +146,8 @@ class Scraper():
                             data["Activity"],
                             data["Day"],
                             data["Loc"],
-                            data["Time"].split("-")[0],
-                            data["Time"].split("-")[1],
+                            data["start_time"],
+                            data["end_time"],
                             data["Status"]                                                        
                         )
 
