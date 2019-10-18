@@ -8,6 +8,7 @@ courses = s.getData(courses)
 db = Database()
 
 db.create_tables()
+db.truncate_tables()
 db.populate(courses)
 
 #     print(course.__dict__)
