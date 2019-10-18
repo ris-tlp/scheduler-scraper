@@ -1,7 +1,8 @@
-from scraper import Scraper
-from courses import Courses, Sections
-from database import Database
 import logging 
+from scraper import Scraper
+from database import Database
+from models.courses import Courses
+from models.sections import Sections
 
 s = Scraper()
 courses = {}

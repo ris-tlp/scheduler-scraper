@@ -1,4 +1,5 @@
-from courses import Courses, Sections
+from models.courses import Courses
+from models.sections import Sections
 from bs4 import BeautifulSoup
 import requests
 import logging
