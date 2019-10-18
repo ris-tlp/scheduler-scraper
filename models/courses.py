@@ -11,7 +11,7 @@ class Course(Base):
     title = Column(String(length=255), nullable=False)
     term = Column(String(length=255), nullable=False)
     major = Column(String(length=255), nullable=False)
-    sections = relationship("Sections", backref="Courses")
+    sections = relationship("Section", backref="Course")
 
     def __init__(self, code, title, term, major, sections):
         self.code = code
