@@ -89,9 +89,9 @@ class Scraper():
         self.setDepartments()
         self.setFormAttributes()
 
-        for term in self.terms[:2]:
+        for term in self.terms:
             logging.info(term)
-            for dept in self.depts[:4]:
+            for dept in self.depts:
                 
                 try:
                     response = self.session.post(self.url, data=self.setPayload(term, dept))
@@ -100,7 +100,6 @@ class Scraper():
 
                 soup = BeautifulSoup(response.text, 'html.parser')
                 numberOfCourses = 0
-                previousCourse = None
 
                 for row in soup.find_all("div", class_="trow"):
                     # fetch data of ONE course
