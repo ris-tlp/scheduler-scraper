@@ -33,7 +33,7 @@ class Courses(Base):
 # query = (
 #         "CREATE TABLE Courses ("
 #         "id INT NOT NULL AUTO_INCREMENT,"
-#         "code INT NOT NULL,"
+#         "code VARCHAR(255) NOT NULL,"
 #         "title VARCHAR(255) NOT NULL,"
 #         "term VARCHAR(255) NOT NULL,"
 #         "major VARCHAR(5) NOT NULL,"
@@ -86,12 +86,11 @@ class Sections(Base):
 #   query = (
 #         "CREATE TABLE Sections ("
 #         "id INT NOT NULL AUTO_INCREMENT,"
-#         "number INT NOT NULL,"
+#         "number VARCAHR(255) NOT NULL,"
 #         "instructor VARCHAR(255) NOT NULL,"
 #         "activity VARCHAR(255) NOT NULL,"
 #         "days VARCHAR(5) NOT NULL,"
-#         "bldg VARCHAR(255) NOT NULL,"
-#         "room VARCHAR(255) NOT NULL,"
+#         "location VARCHAR(255) NOT NULL,"
 #         "start_time INT NOT NULL,"
 #         "end_time INT NOT NULL,"
 #         "status INT NOT NULL,"

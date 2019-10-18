@@ -4,6 +4,8 @@ import requests
 import logging
 
 logging.basicConfig(filename="logs.log", level=logging.INFO)
+# truncating log file before new run
+open("logs.log", "w").close()
 
 
 class Scraper():
@@ -31,6 +33,8 @@ class Scraper():
 
         for value in options.find_all("option"):
             self.depts.append(value.get("value"))      
+        
+        logging.info(f"Depts acquired: {self.depts}")
 
     def setFormAttributes(self):
         '''Initializes form attributes necessary for submission'''
@@ -41,6 +45,7 @@ class Scraper():
             "input", id="__VIEWSTATE").get("value")
         self.__EVENTVALIDATION = self.soup.find(
             "input", id="__EVENTVALIDATION").get("value")
+        
 
     def setTerms(self, limit=3):
         '''Initializes term with the 3 most recent terms'''
@@ -52,6 +57,7 @@ class Scraper():
         ]
 
         self.terms = self.terms[:limit]
+        logging.info(f"Terms acquired: {self.terms}")
         
     def setPayload(self, term, dept) -> dict:
         
@@ -98,8 +104,8 @@ class Scraper():
         self.setFormAttributes()
 
         for term in self.terms:
-            logging.info(term)
             for dept in self.depts:
+                logging.info(f"\t{term}: {dept}")
                 
                 try:
                     response = self.session.post(self.url, data=self.setPayload(term, dept))
@@ -180,5 +186,6 @@ class Scraper():
                         
                     # Set course to unique courseID
                     courses[courseID] = course
+                    logging.info(f"\t {courseID} created")
 
         return courses
