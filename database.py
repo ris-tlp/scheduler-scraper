@@ -52,4 +52,6 @@ class Database():
         for course, data in courseData.items():
             session.add(data)
             session.commit()
+            
+        session.close()
         
