@@ -72,10 +72,12 @@ class Scraper():
         data = {}
         
         for inner in row.find_all("div", class_="tdata"):
-            # print(inner)
+            # Some courses are structured with an additional
+            # ":" in their name and hence cause an error
+            # when unpacking with just inner.text.split(":")
+            # Anything after the first ":" is going to be the
+            # value of the attribute and hence can be joined
             key, value = inner.text.split(":")[0], " ".join(inner.text.split(":")[1:])
-            print(key + "   " + value)
-            print("\n")
             data[key] = value
 
         return data
