@@ -32,11 +32,14 @@ class Database:
 
     def populate(self, courseData: dict):
         """Initially populate the tables with data"""
+
         courselist = list(courseData.values())
         session.add_all(courselist)
         session.commit()
 
     def truncate_tables(self):
+        """Trunactes sections and courses tables in the database"""
+
         session.execute("""TRUNCATE TABLE sections""")
         session.execute("""SET FOREIGN_KEY_CHECKS = 0""")
         session.execute("""TRUNCATE TABLE courses""")
