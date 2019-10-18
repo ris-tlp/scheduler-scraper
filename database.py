@@ -10,9 +10,16 @@ from sqlalchemy import (
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker, relationship
 from sqlalchemy_utils import database_exists, create_database
+import json
 
-# TODO: use environment variables for credentials
-engine = create_engine("mysql+pymysql://omar:omar@localhost/scheduler", echo=True)
+
+with open("credentials.json", "r") as read_file:
+    data = json.load(read_file)
+
+engine = create_engine(
+    f"mysql+pymysql://{data['user']}:{data['password']}@localhost/{data['database']}",
+    echo = True
+)
 
 if not database_exists(engine.url):
     create_database(engine.url)
