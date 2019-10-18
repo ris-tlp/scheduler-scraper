@@ -1,5 +1,5 @@
-from models.courses import Courses
-from models.sections import Sections
+from models.courses import Course
+from models.sections import Section
 from bs4 import BeautifulSoup
 import requests
 import logging
@@ -153,7 +153,7 @@ class Scraper():
                     # new section to the course object
                     courseID = data["Course"] + term
                     
-                    section = Sections(
+                    section = Section(
                             data["CRN"],
                             data["Section"],
                             data["Instructor"],
@@ -173,7 +173,7 @@ class Scraper():
                         sections = []
                         sections.append(section)
 
-                        course = Courses(
+                        course = Course(
                             data["Course"],
                             data["Course Name"],
                             term,

@@ -1,8 +1,8 @@
 import logging 
 from scraper import Scraper
 from database import Database
-from models.courses import Courses
-from models.sections import Sections
+from models.courses import Course
+from models.sections import Section
 
 s = Scraper()
 courses = {}

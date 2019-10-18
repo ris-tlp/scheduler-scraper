@@ -2,7 +2,7 @@ from sqlalchemy import Column, Integer, String, ForeignKey
 from sqlalchemy.orm import relationship
 from database import Base
 
-class Sections(Base):
+class Section(Base):
     __tablename__ = "sections"
 
     id = Column(Integer, primary_key=True)
