@@ -40,4 +40,5 @@ class Database:
         session.execute("""TRUNCATE TABLE sections""")
         session.execute("""SET FOREIGN_KEY_CHECKS = 0""")
         session.execute("""TRUNCATE TABLE courses""")
+        session.execute("""SET FOREIGN_KEY_CHECKS = 1""")
 
