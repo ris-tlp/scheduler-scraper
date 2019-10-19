@@ -14,11 +14,11 @@ import json
 
 
 with open("credentials.json", "r") as read_file:
-    data = json.load(read_file)
+    creds = json.load(read_file)
 
 engine = create_engine(
-    f"mysql+pymysql://{data['user']}:{data['password']}@localhost/{data['database']}",
-    echo = True
+    f"mysql+pymysql://{creds['user']}:{creds['password']}@localhost/{creds['database']}",
+    echo = False
 )
 
 if not database_exists(engine.url):
