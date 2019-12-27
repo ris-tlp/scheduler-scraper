@@ -6,8 +6,8 @@ import logging
 
 logging.basicConfig(filename="logs.log", level=logging.INFO)
 # truncating log file before new run
-open("logs.log", "w").close()
-
+with open('logs.log', 'w'):
+    pass
 
 class Scraper():
 
