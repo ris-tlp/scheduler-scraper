@@ -8,7 +8,7 @@ scraper.setTerms(2)
 scraper.setDepartments()
 scraper.setFormAttributes()
 
-payload = scraper.setPayload(scraper.terms, scraper.depts)
+payload = scraper.getPayload(scraper.terms, scraper.depts)
 response = requests.post(scraper.url, data=payload)
 soup = BeautifulSoup(response.text, 'html.parser')
 

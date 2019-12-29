@@ -37,6 +37,15 @@ class Scraper():
         
         logging.info(f"Depts acquired: {self.depts}")
 
+    def setTerms(self, limit=3):
+        '''Initializes term with the 3 most recent terms'''
+
+        for term in self.soup.find(id="CntntPlcHldr_ddlTerm").find_all("option"):
+            self.terms.append(term.get("value"))
+
+        self.terms = self.terms[:limit]
+        logging.info(f"Terms acquired: {self.terms}")
+
     def setFormAttributes(self):
         '''Initializes form attributes necessary for submission'''
 
@@ -47,22 +56,8 @@ class Scraper():
         self.__EVENTVALIDATION = self.soup.find(
             "input", id="__EVENTVALIDATION").get("value")
         
-
-    def setTerms(self, limit=3):
-        '''Initializes term with the 3 most recent terms'''
-
-        [
-            self.terms.append(term.get("value"))
-            for term
-            in self.soup.find(id="CntntPlcHldr_ddlTerm").find_all("option")
-        ]
-
-        self.terms = self.terms[:limit]
-        logging.info(f"Terms acquired: {self.terms}")
-        
-    def setPayload(self, term, dept) -> dict:
-        
-        self.setFormAttributes()
+    def getPayload(self, term, dept) -> dict:
+    
         payload = {
             '__VIEWSTATE': self.__VIEWSTATE,
             '__VIEWSTATEGENERATOR': self.__VIEWSTATEGENERATOR,
@@ -84,10 +79,7 @@ class Scraper():
             # when unpacking with just inner.text.split(":").
             # Anything after the first ":" is going to be the
             # value of the attribute, hence maxsplit=1
-            key, value = (
-                inner.text.split(":", maxsplit=1)[0],
-                inner.text.split(":", maxsplit=1)[1]
-            )
+            key, value = inner.text.split(":", maxsplit=1)
             data[key] = value
 
         return data
@@ -109,7 +101,7 @@ class Scraper():
                 logging.info(f"\t{term}: {dept}")
                 
                 try:
-                    response = self.session.post(self.url, data=self.setPayload(term, dept))
+                    response = self.session.post(self.url, data=self.getPayload(term, dept))
                 except requests.RequestException as e:
                     logging.error(e)
 
