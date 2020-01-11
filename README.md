@@ -20,10 +20,14 @@ pipenv install <package-name>
 ```
 
 ## Usage
-Update the `credentials.json` file with your actual credentials. You may have to run the following command to stop git from tracking the file.
+Create `credentials.json` file with your actual credentials in the following format.
 
 ```
-git update-index --assume-unchanged credentials.json
+{
+    "user":"USERNAME",
+    "password": "PASSWORD",
+    "database": "DATABASE_NAME"
+}
 ```
 
 Run `maindriver.py`.
