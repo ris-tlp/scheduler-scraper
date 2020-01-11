@@ -1,13 +1,4 @@
-# scheduler-scraper
-A simple utitlity that scrapes KFUPM's CourseOfferings page and parses data to update iKFUPM Scheduler's database periodically.
-
-### to-do
-Write docs  
-Update unit tests  
-Implement async requests
-Update Readme
-
-## Usage
+## Setup
 Install `pipenv` if you haven't already.
 ```
 pip install pipenv
@@ -27,3 +18,13 @@ Any new dependency must be installed using:
 ```
 pipenv install <package-name>
 ```
+
+## Usage
+Update the `credentials.json` file with your actual credentials.
+
+Run `maindriver.py`.
+```
+python maindriver.py
+```
+
+Read the project Wiki for more details.
