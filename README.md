@@ -1,3 +1,25 @@
+## Course-Offering-API
+
+Replace anything in between `<>` with the actual value. `[]` means optional.
+
+### Terms
+| Endpoint               | Description                                                              | Example          |
+|------------------------|--------------------------------------------------------------------------|------------------|
+| `/terms/[limit]`    | Get all terms. Optionally add a limit to the number of terms returned\.     |                  |
+
+### Courses
+| **Endpoint**                                               | **Description**                                               | **Example** |
+|------------------------------------------------------------|---------------------------------------------------------------|-------------|
+| `/courses/<term>/all`                                      | Get all courses for the given term.                           |             |
+| `/courses/<term>/<major>`                                  | Get all courses for the given term and major.                 |             |
+| `/courses/<term>/<major>/<course-number>`                  | Get all sections for the given term, major and course number. |             |
+| `/courses/<term>/<major>/<course-number>/<section-number>` | Get a section for the given term, major and course number.    |             |
+| `/courses/<term>/<CRN>`                                    | Get the course for the given term and CRN.                    |             |
+
+### Majors
+
+### Instructors
+
 ## Setup
 Install `pipenv` if you haven't already.
 ```
