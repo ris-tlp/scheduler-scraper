@@ -1,7 +1,7 @@
 import logging
 from courseoffering.app import app
-from courseoffering.common.database import Database
-from courseoffering.common.scraper import Scraper
+from courseoffering.utils.database import Database
+from courseoffering.utils.scraper import Scraper
 
 s = Scraper()
 courses = {}

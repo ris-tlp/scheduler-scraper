@@ -1,6 +1,6 @@
 from sqlalchemy import Column, Integer, String, ForeignKey
 from sqlalchemy.orm import relationship
-from courseoffering.common.database import Base
+from courseoffering.utils.database import Base
 
 
 class Course(Base):

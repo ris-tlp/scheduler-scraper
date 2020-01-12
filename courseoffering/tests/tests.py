@@ -1,7 +1,7 @@
 import unittest
 import requests
 from bs4 import BeautifulSoup
-from scraper import Scraper
+from courseoffering.utils.scraper import Scraper
 
 scraper = Scraper()
 scraper.setTerms(2)
