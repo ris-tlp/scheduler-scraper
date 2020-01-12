@@ -1,6 +1,6 @@
 from sqlalchemy import Column, Integer, String, ForeignKey
 from sqlalchemy.orm import relationship
-from database import Base
+from courseoffering.common.database import Base
 
 class Section(Base):
     __tablename__ = "sections"
@@ -17,7 +17,6 @@ class Section(Base):
     status = Column(String(length=255), nullable=False)
     course_id = Column(Integer, ForeignKey("courses.id"))
 
-
     def __init__(self, crn, number, instructor, activity, days, location, start_time, end_time, status):
         self.crn = crn
         self.number = number
@@ -28,7 +27,6 @@ class Section(Base):
         self.start_time = start_time
         self.end_time = end_time
         self.status = status
-
 
     def __str__(self):
         return (

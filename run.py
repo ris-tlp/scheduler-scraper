@@ -1,17 +1,19 @@
-import logging 
-from scraper import Scraper
-from database import Database
-from models.courses import Course
-from models.sections import Section
+import logging
+from courseoffering.app import app
+from courseoffering.common.database import Database
+from courseoffering.common.scraper import Scraper
 
 s = Scraper()
 courses = {}
 courses = s.getData(courses)
-db = Database()
 
+db = Database()
 db.create_tables()
 logging.info("\tTables created")
 db.truncate_tables()
 logging.info("\tTables truncated")
 db.populate(courses)
 logging.info("\tTables populated")
+
+if __name__ == "__main__":
+    app.run(debug=True)
