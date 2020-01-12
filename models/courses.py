@@ -19,7 +19,7 @@ class Course(Base):
         self.term = term
         self.major = major
         self.sections = sections
-        
+   
     def __str__(self):
         return (
             f"Major: {self.major}\n"

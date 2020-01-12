@@ -18,7 +18,7 @@ with open("credentials.json", "r") as read_file:
 
 engine = create_engine(
     f"mysql+pymysql://{creds['user']}:{creds['password']}@localhost/{creds['database']}",
-    echo = False
+    echo=False
 )
 
 if not database_exists(engine.url):
