@@ -9,7 +9,8 @@ logging.basicConfig(filename="logs.log", level=logging.INFO)
 with open('logs.log', 'w'):
     pass
 
-class Scraper():
+
+class Scraper:
 
     def __init__(self):
         self.depts = []

@@ -12,13 +12,12 @@ from sqlalchemy.orm import sessionmaker, relationship
 from sqlalchemy_utils import database_exists, create_database
 import json
 
-
 with open("credentials.json", "r") as read_file:
     creds = json.load(read_file)
 
 engine = create_engine(
     f"mysql+pymysql://{creds['user']}:{creds['password']}@localhost/{creds['database']}",
-    echo = False
+    echo=False
 )
 
 if not database_exists(engine.url):
@@ -28,6 +27,9 @@ Session = sessionmaker(bind=engine)
 Base = declarative_base()
 session = Session()
 meta = MetaData()
+
+
+# def
 
 
 class Database:
