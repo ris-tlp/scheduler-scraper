@@ -6,5 +6,5 @@ from courseoffering.resources.Terms import Terms
 app = Flask(__name__)
 api = Api(app)
 
-api.add_resource(HelloWorld, '/')
-api.add_resource(Terms, '/terms')
+api.add_resource(HelloWorld, "/")
+api.add_resource(Terms, "/terms/", "/terms/<int:limit>")

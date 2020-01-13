@@ -3,11 +3,6 @@ from sqlalchemy.orm import relationship
 from courseoffering.utils.database import Base, session
 
 
-# def return_terms():
-    # result = session.query().with_entities(Course.term)
-    # session.query(Course)
-
-
 class Course(Base):
     __tablename__ = "courses"
 
@@ -34,9 +29,6 @@ class Course(Base):
             f"Sections: {self.sections}\n"
         )
 
-    # def return_terms(self):
-    #     result = session.query().with_entities(self.term)
-    #     print(result)
 # RAW QUERY
 # query = (
 #         "CREATE TABLE Courses ("

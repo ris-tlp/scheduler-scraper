@@ -29,9 +29,6 @@ session = Session()
 meta = MetaData()
 
 
-# def
-
-
 class Database:
     """Handles all operations that concerns Databases"""
 

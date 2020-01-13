@@ -29,7 +29,7 @@ class Scraper:
         self.soup = BeautifulSoup(response.text, 'html.parser')
 
     def setDepartments(self):
-        '''Initializes dept with all available departments'''
+        """Initializes dept with all available departments"""
 
         options = self.soup.find(id="CntntPlcHldr_ddlDept")
 
@@ -39,7 +39,7 @@ class Scraper:
         logging.info(f"Depts acquired: {self.depts}")
 
     def setTerms(self, limit=3):
-        '''Initializes term with the 3 most recent terms'''
+        """Initializes term with the 3 most recent terms"""
 
         for term in self.soup.find(id="CntntPlcHldr_ddlTerm").find_all("option"):
             self.terms.append(term.get("value"))
@@ -48,7 +48,7 @@ class Scraper:
         logging.info(f"Terms acquired: {self.terms}")
 
     def setFormAttributes(self):
-        '''Initializes form attributes necessary for submission'''
+        """Initializes form attributes necessary for submission"""
 
         self.__VIEWSTATEGENERATOR = self.soup.find(
             "input", id="__VIEWSTATEGENERATOR").get("value")
@@ -70,7 +70,7 @@ class Scraper:
         return payload
         
     def getCourseData(self, row) -> dict:
-        '''Iterates and initializes attributes of ONE course'''
+        """Iterates and initializes attributes of ONE course"""
         
         data = {}
         
@@ -85,7 +85,6 @@ class Scraper:
 
         return data
 
-            
     def getData(self, courses: dict) -> list:
         """
         Scrapes the KFUPM Course offering page and returns a
@@ -162,7 +161,7 @@ class Scraper:
                     # course object and append it to the courses dict,
                     # otherwise only create a new section object and
                     # append it to courses.sections
-                    if (courseID not in courses):                        
+                    if courseID not in courses:
                         sections = []
                         sections.append(section)
 

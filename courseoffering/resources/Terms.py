@@ -9,9 +9,14 @@ from flask import jsonify
 
 class Terms(Resource):
 
-    def get(self):
+    def get(self, limit=None):
         terms = [course.term for course in session.query(Course.term).distinct()]
-        print(terms)
 
-        data = {"Terms": terms}
-        return jsonify(data)
+        if limit is None:
+            return jsonify({
+                "Terms": terms
+            })
+        else:
+            return jsonify({
+                "Terms": terms[:limit]
+            })

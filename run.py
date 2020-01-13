@@ -1,7 +1,9 @@
 import logging
 from courseoffering.app import app
+from flask_script import Manager
 from courseoffering.utils.database import Database
 from courseoffering.utils.scraper import Scraper
+
 #
 # s = Scraper()
 # courses = {}
@@ -15,5 +17,13 @@ from courseoffering.utils.scraper import Scraper
 # db.populate(courses)
 # logging.info("\tTables populated")
 
-if __name__ == "__main__":
+manager = Manager(app)
+
+
+@manager.command
+def run():
     app.run(debug=True)
+
+
+if __name__ == "__main__":
+    manager.run()
