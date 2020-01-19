@@ -1,7 +1,4 @@
 from flask_restful import Resource
-# from courseoffering.utils.database import Database
-# from courseoffering.utils.database import return_terms
-# from courseoffering.models.courses import return_terms
 from courseoffering.utils.database import session
 from courseoffering.models.courses import Course
 from flask import jsonify
