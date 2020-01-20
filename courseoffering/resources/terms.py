@@ -5,15 +5,12 @@ from flask import jsonify
 
 
 class Terms(Resource):
+    """Resource for /terms/[limit]"""
 
     def get(self, limit=None):
         terms = [course.term for course in session.query(Course.term).distinct()]
 
         if limit is None:
-            return jsonify({
-                "Terms": terms
-            })
+            return jsonify({"Terms": terms})
         else:
-            return jsonify({
-                "Terms": terms[:limit]
-            })
+            return jsonify({"Terms": terms[:limit]})
