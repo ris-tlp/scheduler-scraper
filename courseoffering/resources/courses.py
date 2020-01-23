@@ -30,7 +30,7 @@ class CoursesTermMajor(Resource):
 
     def get(self, term, major):
 
-        courses = [course.code for course in session.query(Course).filter(
+        courses = [course.return_serializable_course() for course in session.query(Course).filter(
             Course.term == correctTermFormat(term),
             Course.major == major
         )]
