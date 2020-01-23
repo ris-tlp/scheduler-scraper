@@ -1,8 +1,11 @@
+import json
+
 from flask_restful import Resource
 from courseoffering.utils.database import session
 from courseoffering.models.courses import Course
 from courseoffering.models.sections import Section
 from flask import jsonify
+from sqlalchemy.ext.serializer import loads, dumps
 
 
 def correctTermFormat(term: str) -> str:
@@ -45,14 +48,15 @@ class CoursesTermCRN(Resource):
     """Resource for /courses/<term>/<CRN>"""
 
     def get(self, term, crn):
-
-        courses = [course.return_serializable_course() for course in session.query(Course).join(Section).filter(
+        result = session.query(Course).join(Section).filter(
             Section.crn == crn,
             Course.term == correctTermFormat(term)
-        )]
+        )
+
+        courses = [course.as_dict() for course in result]
 
         if not courses:
-            return jsonify({"Courses:" "None"})
+            return jsonify({"Courses": "None"})
         else:
             return jsonify({"Courses": courses})
 

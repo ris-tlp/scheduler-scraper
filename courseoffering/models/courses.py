@@ -29,21 +29,23 @@ class Course(Base):
             f"Sections: {self.sections}\n"
         )
 
-    def return_serializable_sections(self):
-        """Converts section objects to serializable versions of themselves to allow JSON serialization"""
-        serializable_sections = [section.return_serializable_section() for section in self.sections]
-        return serializable_sections
+    # def return_serializable_sections(self):
+    #     """Converts section objects to serializable versions of themselves to allow JSON serialization"""
+    #     serializable_sections = [section.return_serializable_section() for section in self.sections]
+    #     return serializable_sections
 
-    def return_serializable_course(self):
-        """Returns a dictionary of the attributes to allow JSON serialization"""
-        return {
-            "Major": self.major,
-            "Term": self.term,
-            "Code": self.code,
-            "Title": self.title,
-            "Sections": self.return_serializable_sections()
-        }
+    # def return_serializable_course(self):
+    #     """Returns a dictionary of the attributes to allow JSON serialization"""
+    #     return {
+    #         "Major": self.major,
+    #         "Term": self.term,
+    #         "Code": self.code,
+    #         "Title": self.title,
+    #         "Sections": self.return_serializable_sections()
+    #     }
 
+    def as_dict(self):
+       return {c.name: str(getattr(self, c.name)) for c in self.__table__.columns}
 
 # RAW QUERY
 # query = (
