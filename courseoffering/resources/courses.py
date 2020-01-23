@@ -15,7 +15,7 @@ class CoursesTermAll(Resource):
 
     def get(self, term):
 
-        courses = [course.code for course in session.query(Course).filter(
+        courses = [course.return_serializable_course() for course in session.query(Course).filter(
             Course.term == correctTermFormat(term)
         )]
 
@@ -38,7 +38,7 @@ class CoursesTermMajor(Resource):
         if not courses:
             return jsonify({"Courses": "None"})
         else:
-            return jsonify({"Courses": courses}
+            return jsonify({"Courses": courses})
 
 
 class CoursesTermCRN(Resource):
@@ -46,7 +46,7 @@ class CoursesTermCRN(Resource):
 
     def get(self, term, crn):
 
-        courses = [course.code for course in session.query(Course).join(Section).filter(
+        courses = [course.return_serializable_course() for course in session.query(Course).join(Section).filter(
             Section.crn == crn,
             Course.term == correctTermFormat(term)
         )]

@@ -19,7 +19,7 @@ class Course(Base):
         self.term = term
         self.major = major
         self.sections = sections
-        
+
     def __str__(self):
         return (
             f"Major: {self.major}\n"
@@ -28,6 +28,22 @@ class Course(Base):
             f"Title: {self.title}\n"
             f"Sections: {self.sections}\n"
         )
+
+    def return_serializable_sections(self):
+        """Converts section objects to serializable versions of themselves to allow JSON serialization"""
+        serializable_sections = [section.return_serializable_section() for section in self.sections]
+        return serializable_sections
+
+    def return_serializable_course(self):
+        """Returns a dictionary of the attributes to allow JSON serialization"""
+        return {
+            "Major": self.major,
+            "Term": self.term,
+            "Code": self.code,
+            "Title": self.title,
+            "Sections": self.return_serializable_sections()
+        }
+
 
 # RAW QUERY
 # query = (

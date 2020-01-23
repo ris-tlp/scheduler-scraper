@@ -40,6 +40,20 @@ class Section(Base):
             f"\nEnd time: {self.end_time}"
             f"\nStatus: {self.status}"
         )
+
+    def return_serializable_section(self):
+        """Returns a dictionary of the attributes to allow JSON serialization"""
+        return {
+            "Number": self.number,
+            "CRN": self.crn,
+            "Instructor": self.instructor,
+            "Activity": self.activity,
+            "Days": self.days,
+            "Location": self.location,
+            "Start Time": self.start_time,
+            "End Time": self.end_time,
+            "Status": self.status
+        }
 # RAW QUERY
 #   query = (
 #         "CREATE TABLE Sections ("
