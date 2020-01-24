@@ -10,7 +10,15 @@ from sqlalchemy.ext.serializer import loads, dumps
 
 def correctTermFormat(term: str) -> str:
     """Corrects term formats from 192 to 201920"""
+
     return f"20{term}0" if len(term) != 6 else term
+
+
+def prepareCoursesDict(courses: dict, course: Course):
+    """Creates a key with the course code and removes the same code from the Course object to prevent redundancy"""
+
+    courses[course.code] = course.return_serializable_course()
+    del courses[course.code]["Code"]
 
 
 class CoursesTermAll(Resource):
@@ -18,14 +26,23 @@ class CoursesTermAll(Resource):
 
     def get(self, term):
 
-        courses = [course.return_serializable_course() for course in session.query(Course).filter(
-            Course.term == correctTermFormat(term)
-        )]
+        # courses = [course.return_serializable_course() for course in session.query(Course).filter(
+        #     Course.term == correctTermFormat(term)
+        # )]
+
+        # courses = {course.code: course.return_serializable_course() for course in session.query(Course).filter(
+        #     Course.term == correctTermFormat(term)
+        # )}
+
+        courses = {}
+
+        for course in session.query(Course).filter(Course.term == correctTermFormat(term)):
+            prepareCoursesDict(courses, course)
 
         if not courses:
             return jsonify({"Courses": "None"})
         else:
-            return jsonify({"Courses": courses})
+            return jsonify(courses)
 
 
 class CoursesTermMajor(Resource):
@@ -33,15 +50,20 @@ class CoursesTermMajor(Resource):
 
     def get(self, term, major):
 
-        courses = [course.return_serializable_course() for course in session.query(Course).filter(
-            Course.term == correctTermFormat(term),
-            Course.major == major
-        )]
+        # courses = [course.return_serializable_course() for course in session.query(Course).filter(
+        #     Course.term == correctTermFormat(term),
+        #     Course.major == major
+        # )]
+
+        courses = {}
+
+        for course in session.query(Course).filter(Course.term == correctTermFormat(term), Course.major == major):
+            prepareCoursesDict(courses, course)
 
         if not courses:
             return jsonify({"Courses": "None"})
         else:
-            return jsonify({"Courses": courses})
+            return jsonify(courses)
 
 
 class CoursesTermCRN(Resource):
@@ -54,6 +76,11 @@ class CoursesTermCRN(Resource):
         )
 
         courses = [course.as_dict() for course in result]
+        print(courses)
+
+
+        # print(courses)
+        # ncourses = {course["code"]: course for course in courses}
 
         if not courses:
             return jsonify({"Courses": "None"})
