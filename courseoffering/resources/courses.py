@@ -1,11 +1,8 @@
-import json
-
 from flask_restful import Resource
 from courseoffering.utils.database import session
 from courseoffering.models.courses import Course
 from courseoffering.models.sections import Section
 from flask import jsonify
-from sqlalchemy.ext.serializer import loads, dumps
 
 
 def correctTermFormat(term: str) -> str:
@@ -26,14 +23,6 @@ class CoursesTermAll(Resource):
 
     def get(self, term):
 
-        # courses = [course.return_serializable_course() for course in session.query(Course).filter(
-        #     Course.term == correctTermFormat(term)
-        # )]
-
-        # courses = {course.code: course.return_serializable_course() for course in session.query(Course).filter(
-        #     Course.term == correctTermFormat(term)
-        # )}
-
         courses = {}
 
         for course in session.query(Course).filter(Course.term == correctTermFormat(term)):
@@ -50,11 +39,6 @@ class CoursesTermMajor(Resource):
 
     def get(self, term, major):
 
-        # courses = [course.return_serializable_course() for course in session.query(Course).filter(
-        #     Course.term == correctTermFormat(term),
-        #     Course.major == major
-        # )]
-
         courses = {}
 
         for course in session.query(Course).filter(Course.term == correctTermFormat(term), Course.major == major):
@@ -70,21 +54,19 @@ class CoursesTermCRN(Resource):
     """Resource for /courses/<term>/<CRN>"""
 
     def get(self, term, crn):
-        result = session.query(Course).join(Section).filter(
+
+        courses = {}
+
+        query = session.query(Course).join(Section).filter(
             Section.crn == crn,
             Course.term == correctTermFormat(term)
         )
 
-        courses = [course.as_dict() for course in result]
-        print(courses)
-
-
-        # print(courses)
-        # ncourses = {course["code"]: course for course in courses}
+        prepareCoursesDict(courses, query.first())
 
         if not courses:
             return jsonify({"Courses": "None"})
         else:
-            return jsonify({"Courses": courses})
+            return jsonify(courses)
 
 
