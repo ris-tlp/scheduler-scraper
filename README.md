@@ -52,9 +52,9 @@ Create `credentials.json` file with your actual credentials in the following for
 }
 ```
 
-Run `maindriver.py`.
+Run `run.py` with run as the entry point.
 ```
-python maindriver.py
+python run.py run
 ```
 
 Read the project Wiki for more details.
