@@ -1,6 +1,7 @@
-from sqlalchemy import Column, Integer, String, ForeignKey
+from sqlalchemy import Column, Integer, String
 from sqlalchemy.orm import relationship
-from courseoffering.utils.database import Base, session
+
+from scraper.database import Base
 
 
 class Course(Base):

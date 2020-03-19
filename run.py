@@ -1,21 +1,5 @@
-import logging
-from courseoffering.app import app
 from flask_script import Manager
-from courseoffering.utils.database import Database
-from courseoffering.utils.scraper import Scraper
-
-#
-# s = Scraper()
-# courses = {}
-# courses = s.getData(courses)
-#
-# db = Database()
-# db.create_tables()
-# logging.info("\tTables created")
-# db.truncate_tables()
-# logging.info("\tTables truncated")
-# db.populate(courses)
-# logging.info("\tTables populated")
+from courseoffering.app import app
 
 manager = Manager(app)
 

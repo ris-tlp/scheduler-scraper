@@ -1,16 +1,12 @@
+import json
+
 from sqlalchemy import (
     create_engine,
     MetaData,
-    Table,
-    Column,
-    Integer,
-    String,
-    ForeignKey,
 )
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import sessionmaker, relationship
+from sqlalchemy.orm import sessionmaker
 from sqlalchemy_utils import database_exists, create_database
-import json
 
 with open("credentials.json", "r") as read_file:
     creds = json.load(read_file)

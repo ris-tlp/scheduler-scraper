@@ -1,7 +1,8 @@
-from flask_restful import Resource
-from courseoffering.utils.database import session
-from courseoffering.models.courses import Course
+from scraper.database import session
 from flask import jsonify
+from flask_restful import Resource
+
+from models.courses import Course
 
 
 class Terms(Resource):

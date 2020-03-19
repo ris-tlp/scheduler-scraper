@@ -1,8 +1,8 @@
-from courseoffering.models.courses import Course
-from courseoffering.models.sections import Section
-from bs4 import BeautifulSoup
-import requests
 import logging
+import requests
+from bs4 import BeautifulSoup
+from models.courses import Course
+from models.sections import Section
 
 logging.basicConfig(filename="logs.log", level=logging.INFO)
 # truncating log file before new run

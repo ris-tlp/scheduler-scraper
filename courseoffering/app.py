@@ -1,7 +1,8 @@
 from flask import Flask
-from flask_restful import Resource, Api
-from courseoffering.resources.terms import Terms
-from courseoffering.resources.courses import CoursesTermAll, CoursesTermMajor, CoursesTermCRN
+from flask_restful import Api
+
+from courseoffering.resources.courses_resources import CoursesTermAll, CoursesTermMajor, CoursesTermCRN
+from courseoffering.resources.terms_resources import Terms
 
 app = Flask(__name__)
 api = Api(app)

@@ -1,6 +1,7 @@
 from sqlalchemy import Column, Integer, String, ForeignKey
-from sqlalchemy.orm import relationship
-from courseoffering.utils.database import Base
+
+from scraper.database import Base
+
 
 class Section(Base):
     __tablename__ = "sections"
