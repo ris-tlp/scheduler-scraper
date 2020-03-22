@@ -8,8 +8,6 @@ pep8 = "*"
 autopep8 = "*"
 
 [packages]
-requests = "*"
-beautifulsoup4 = "*"
 sqlalchemy = "*"
 sqlalchemy-utils = "*"
 pymysql = "*"
@@ -18,7 +16,6 @@ flask-sqlalchemy = "*"
 cryptography = "*"
 flask-script = "*"
 selenium = "*"
-http-request-randomizer = "*"
 
 [requires]
 python_version = "3.7"

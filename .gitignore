@@ -4,4 +4,3 @@ __pycache__
 logs.log
 geckodriver.log
 credentials.json
-

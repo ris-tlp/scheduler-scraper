@@ -33,7 +33,9 @@ class Scraper:
     def setDepartments(self):
         """Initializes dept with all available departments"""
 
-        self.departments = self.chrome.find_element_by_id("CntntPlcHldr_ddlDept").find_elements_by_tag_name("option")
+        self.departments = self.chrome\
+            .find_element_by_id("CntntPlcHldr_ddlDept")\
+            .find_elements_by_tag_name("option")
 
         self.departments = [dept.get_attribute("value") for dept in self.departments[1:]]
         print(self.departments)
