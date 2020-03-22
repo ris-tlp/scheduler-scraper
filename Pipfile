@@ -16,6 +16,7 @@ flask-sqlalchemy = "*"
 cryptography = "*"
 flask-script = "*"
 selenium = "*"
+beautifulsoup4 = "*"
 
 [requires]
 python_version = "3.7"
