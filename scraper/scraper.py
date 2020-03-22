@@ -21,21 +21,21 @@ class Scraper:
         self.terms = []
 
         chrome_options = Options()
-        chrome_options.headless = True
+        # chrome_options.headless = True
         chrome_options.add_argument("--disable-gpu")
         chrome_options.add_argument("--disable-extensions")
         chrome_options.add_argument('--no-sandbox')
         chrome_options.add_argument('disable-infobars')
         chrome_options.add_argument('start-maximized')
 
-        self.chrome = webdriver.Chrome(options=chrome_options)
+        self.chrome = webdriver.Chrome(options=chrome_options, executable_path="/home/ris/workspace/chromedriver/chromedriver")
         self.chrome.get("https://registrar.kfupm.edu.sa/CourseOffering")
 
         time.sleep(10)
 
         self.parser = BeautifulSoup(self.chrome.page_source, 'html.parser')
 
-    def setTerms(self, limit=3):
+    def setTerms(self, limit=2):
         """Initializes term with the 3 most recent terms"""
 
         for term in self.parser.find(id="CntntPlcHldr_ddlTerm").find_all("option")[:limit]:
@@ -156,15 +156,7 @@ class Scraper:
                     courses[courseID] = course
                     logging.info(f"\t {courseID} created")
 
+            time.sleep(2)
         return courses
 
 
-startTime = datetime.now()
-
-s = Scraper()
-courses = s.getData({})
-for course, data in courses.items():
-    print(data)
-
-s.chrome.quit()
-print(f"TOTAL: {datetime.now() - startTime}")
