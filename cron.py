@@ -3,9 +3,12 @@ from scraper.scraper import Scraper
 import logging
 
 
-s = Scraper()
-courses = {}
-courses = s.getData(courses)
+scraper = Scraper()
+courses = scraper.getData({})
+
+for name, data in courses.items():
+    print (name + " : " + data)
+
 
 db = Database()
 db.create_tables()
