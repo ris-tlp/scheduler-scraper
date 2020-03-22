@@ -1,5 +1,4 @@
 from flask_restful import Resource
-# from courseoffering.utils.database import session
 from scraper.database import session
 from models.courses import Course
 from models.sections import Section

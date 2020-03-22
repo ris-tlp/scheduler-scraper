@@ -21,7 +21,7 @@ class Scraper:
         self.terms = []
 
         chrome_options = Options()
-        # chrome_options.headless = True
+        chrome_options.headless = True
         chrome_options.add_argument("--disable-gpu")
         chrome_options.add_argument("--disable-extensions")
         chrome_options.add_argument('--no-sandbox')
@@ -85,7 +85,6 @@ class Scraper:
                 numberOfCourses = 0
 
                 for row in self.parser.find_all("div", class_="trow"):
-
                     # fetch data of ONE course
                     data = self.getCourseData(row)
 

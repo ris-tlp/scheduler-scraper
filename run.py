@@ -1,5 +1,5 @@
 from flask_script import Manager
-from courseoffering.app import app
+from api.app import app
 
 manager = Manager(app)
 
