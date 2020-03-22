@@ -17,6 +17,8 @@ flask-restful = "*"
 flask-sqlalchemy = "*"
 cryptography = "*"
 flask-script = "*"
+selenium = "*"
+http-request-randomizer = "*"
 
 [requires]
 python_version = "3.7"
