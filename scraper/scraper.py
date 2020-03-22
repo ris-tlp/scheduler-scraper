@@ -1,6 +1,7 @@
 import logging
 from selenium.webdriver.support.ui import Select
 from selenium import webdriver
+from selenium.webdriver.chrome.options import Options
 from models.sections import Section
 from models.courses import Course
 
@@ -16,10 +17,18 @@ class Scraper:
         self.departments = []
         self.terms = []
         # self.url = "https://registrar.kfupm.edu.sa/CourseOffering"
-
-        self.chrome = webdriver.Chrome(executable_path="./chromedriver/chromedriver")
+        
+        chrome_options = Options()
+        # chrome_options.headless = True
+        chrome_options.add_argument("--disable-gpu")
+        chrome_options.add_argument("--disable-extensions")
+        chrome_options.add_argument('--no-sandbox')
+        chrome_options.add_argument('disable-infobars')
+        chrome_options.add_argument('start-maximized')
+        
+        self.chrome = webdriver.Chrome(options=chrome_options)
         self.chrome.get("https://registrar.kfupm.edu.sa/CourseOffering")
-        self.chrome.implicitly_wait(10)
+        self.chrome.implicitly_wait(5)
 
     def setTerms(self, limit=1):
         """Initializes term with the 3 most recent terms"""

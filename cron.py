@@ -7,7 +7,7 @@ scraper = Scraper()
 courses = scraper.getData({})
 
 for name, data in courses.items():
-    print (name + " : " + data)
+    print(f"{name} : {data}")
 
 
 db = Database()
