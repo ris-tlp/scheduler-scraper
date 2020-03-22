@@ -61,13 +61,13 @@ class Scraper:
         self.setDepartments()
 
         for term in self.terms:
-            temp = Select(self.chrome.find_element_by_id("CntntPlcHldr_ddlTerm"))
-            temp.select_by_value(term)
+            select = Select(self.chrome.find_element_by_id("CntntPlcHldr_ddlTerm"))
+            select.select_by_value(term)
 
             for dept in self.departments[:1]:
 
-                temp = Select(self.chrome.find_element_by_id("CntntPlcHldr_ddlDept"))
-                temp.select_by_value(dept)
+                select = Select(self.chrome.find_element_by_id("CntntPlcHldr_ddlDept"))
+                select.select_by_value(dept)
 
                 numberOfCourses = 0
 
