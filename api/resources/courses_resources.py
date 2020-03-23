@@ -86,12 +86,10 @@ class CoursesTermMajorCNumber(Resource):
 
         query = session.query(Course).join(Section).filter(
             Course.term == correctTermFormat(term),
-            Course.code == correctMajorFormat(major, courseNumber)
+            Course.code == major + courseNumber
         )
 
         prepareCoursesDict(courses, query.first())
-
-
 
         return jsonify(courses)
 
@@ -102,7 +100,7 @@ class CoursesTermMajorCNumberSection(Resource):
     def get(self, term, major, courseNumber, sectionNumber):
 
         courses = {}
-        code = correctMajorFormat(major, courseNumber)
+        code = major + courseNumber
 
         query = session.query(Course).join(Section).filter(
             Course.term == correctTermFormat(term),
@@ -112,10 +110,10 @@ class CoursesTermMajorCNumberSection(Resource):
 
         prepareCoursesDict(courses, query.first())
 
-        # @TODO better way to query?
-        for section in courses[code]["Sections"]:
-            if section["Number"] == sectionNumber:
-                courses[code]["Sections"] = section
-                break
+        # # @TODO better way to query?
+        # for section in courses[code]["Sections"]:
+        #     if section["Number"] == sectionNumber:
+        #         courses[code]["Sections"] = section
+        #         break
 
         return jsonify(courses)

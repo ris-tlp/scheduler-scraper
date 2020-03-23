@@ -28,7 +28,7 @@ class Scraper:
         chrome_options.add_argument('disable-infobars')
         chrome_options.add_argument('start-maximized')
 
-        self.chrome = webdriver.Chrome(options=chrome_options, executable_path="/home/ris/workspace/chromedriver/chromedriver")
+        self.chrome = webdriver.Chrome(options=chrome_options)
         self.chrome.get("https://registrar.kfupm.edu.sa/CourseOffering")
 
         time.sleep(10)
@@ -88,12 +88,17 @@ class Scraper:
                     # fetch data of ONE course
                     data = self.getCourseData(row)
 
+
                     # splitting course name and sections
                     # as required by the schema
                     data["Section"], data["Course"] = (
                         data["Course-Sec"].split("-")[1],
                         data["Course-Sec"].split("-")[0]
                     )
+
+                    # Removing space in course code for easier querying
+                    data["Course"] = "".join(data["Course"].split())
+
                     # splitting Time as start_time and
                     # end_time as required by schema
                     data["start_time"], data["end_time"] = (
