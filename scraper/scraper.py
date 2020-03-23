@@ -28,7 +28,7 @@ class Scraper:
         chrome_options.add_argument('disable-infobars')
         chrome_options.add_argument('start-maximized')
 
-        self.chrome = webdriver.Chrome(options=chrome_options)
+        self.chrome = webdriver.Chrome(options=chrome_options, executable_path="/home/ris/workspace/chromedriver/chromedriver")
         self.chrome.get("https://registrar.kfupm.edu.sa/CourseOffering")
 
         time.sleep(10)
@@ -69,17 +69,17 @@ class Scraper:
     def getData(self, courses: dict) -> dict:
         """
         Scrapes the KFUPM Course offering page and returns a
-        courses list containing course objects
+        courses dict containing course objects
         """
 
         self.setTerms()
         self.setDepartments()
 
         for term in self.terms:
-            select = Select(self.chrome.find_element_by_id("CntntPlcHldr_ddlTerm")).select_by_value(term)
+            Select(self.chrome.find_element_by_id("CntntPlcHldr_ddlTerm")).select_by_value(term)
 
             for dept in self.departments:
-                select = Select(self.chrome.find_element_by_id("CntntPlcHldr_ddlDept")).select_by_value(dept)
+                Select(self.chrome.find_element_by_id("CntntPlcHldr_ddlDept")).select_by_value(dept)
 
                 self.parser = BeautifulSoup(self.chrome.page_source, 'html.parser')
                 numberOfCourses = 0

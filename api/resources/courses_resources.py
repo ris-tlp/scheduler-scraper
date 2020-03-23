@@ -6,17 +6,11 @@ from flask import jsonify
 
 # @TODO Better naming for Resources
 
+
 def correctTermFormat(term: str) -> str:
     """Corrects term formats from 192 to 201920"""
 
     return f"20{term}0" if len(term) != 6 else term
-
-
-def correctMajorFormat(major: str, courseNumber: str) -> str:
-    """Corrects term formats from ICS102 to ICS 102 as scraped"""
-    # @TODO fix useless space scraped in codes
-
-    return f"{major}{courseNumber}" if len(major) == 4 else f"{major} {courseNumber}"
 
 
 def prepareCoursesDict(courses: dict, course: Course):
@@ -110,10 +104,10 @@ class CoursesTermMajorCNumberSection(Resource):
 
         prepareCoursesDict(courses, query.first())
 
-        # # @TODO better way to query?
-        # for section in courses[code]["Sections"]:
-        #     if section["Number"] == sectionNumber:
-        #         courses[code]["Sections"] = section
-        #         break
+        # @TODO better way to query?
+        for section in courses[code]["Sections"]:
+            if section["Number"] == sectionNumber:
+                courses[code]["Sections"] = section
+                break
 
         return jsonify(courses)
