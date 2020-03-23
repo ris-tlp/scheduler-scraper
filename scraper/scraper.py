@@ -28,7 +28,7 @@ class Scraper:
         chrome_options.add_argument('disable-infobars')
         chrome_options.add_argument('start-maximized')
 
-        self.chrome = webdriver.Chrome(options=chrome_options, executable_path="/home/ris/workspace/chromedriver/chromedriver")
+        self.chrome = webdriver.Chrome(options=chrome_options)
         self.chrome.get("https://registrar.kfupm.edu.sa/CourseOffering")
 
         time.sleep(10)
