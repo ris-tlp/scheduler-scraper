@@ -15,7 +15,6 @@ def correctTermFormat(term: str) -> str:
 
 def prepareCoursesDict(courses: dict, course: Course):
     """Creates a key with the course code and removes the same code from the Course object to prevent redundancy"""
-
     courses[course.code] = course.return_serializable_course()
     del courses[course.code]["Code"]
 
@@ -102,12 +101,13 @@ class CoursesTermMajorCNumberSection(Resource):
             Section.number == sectionNumber
         )
 
+        print(query.first())
         prepareCoursesDict(courses, query.first())
 
         # @TODO better way to query?
-        for section in courses[code]["Sections"]:
-            if section["Number"] == sectionNumber:
-                courses[code]["Sections"] = section
-                break
+        # for section in courses[code]["Sections"]:
+        #     if section["Number"] == sectionNumber:
+        #         courses[code]["Sections"] = section
+        #         break
 
         return jsonify(courses)
