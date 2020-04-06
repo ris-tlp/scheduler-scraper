@@ -3,21 +3,28 @@ from datetime import datetime
 from scraper.scraper import Scraper
 from scraper.database import Database
 from multiprocessing.pool import ThreadPool
+from multiprocessing import Pool
+import multiprocessing
 
 startTime = datetime.now()
 
 scraper = Scraper()
-ThreadPool(5).map(scraper.worker, scraper.terms)
+# courses = ThreadPool(5).map(scraper.worker, scraper.terms)
+courses = Pool(multiprocessing.cpu_count() - 1).map(scraper.worker, scraper.departments)
 
-for name, data in scraper.courses.items():
-    print(f"{name} : {data}")
+# for name, data in scraper.courses.items():
+#     print(f"{name} : {data}")
 
-db = Database()
-db.create_tables()
-logging.info("\tTables created")
-db.truncate_tables()
-logging.info("\tTables truncated")
-db.populate(scraper.courses)
-logging.info("\tTables populated")
+print(courses)
+
+print(f"Number of courses: {scraper.numberCourses}")
+
+# db = Database()
+# db.create_tables()
+# logging.info("\tTables created")
+# db.truncate_tables()
+# logging.info("\tTables truncated")
+# db.populate(scraper.courses)
+# logging.info("\tTables populated")
 
 print(f"TOTAL: {datetime.now() - startTime}")

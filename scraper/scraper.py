@@ -5,8 +5,8 @@ from bs4 import BeautifulSoup
 from models.courses import Course
 from models.sections import Section
 from selenium import webdriver
-from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.support.ui import Select
+from selenium.webdriver.chrome.options import Options
 
 logging.basicConfig(filename="logs.log", level=logging.INFO)
 # truncating log file before new run
@@ -17,10 +17,10 @@ with open('logs.log', 'w'):
 class Scraper:
 
     def __init__(self):
-        self.courses = {}
+        # self.courses = {}
         self.terms = []
         self.departments = []
-        self.threadLocal = threading.local()
+        # self.threadLocal = threading.local()
 
         chrome = self.getDriver(initial=True)
         chrome.get("https://registrar.kfupm.edu.sa/CourseOffering")
@@ -29,6 +29,7 @@ class Scraper:
         self.parser = BeautifulSoup(chrome.page_source, "html.parser")
         self.setTerms()
         self.setDepartments()
+        self.numberCourses = 0
 
         del self.parser
         chrome.quit()
@@ -40,23 +41,23 @@ class Scraper:
         """
 
         chrome_options = Options()
-        chrome_options.add_argument("--headless")
+        # chrome_options.add_argument("--headless")
         chrome_options.add_argument("--disable-gpu")
         chrome_options.add_argument('--no-sandbox')
         chrome_options.add_argument("--disable-extensions")
         chrome_options.add_argument('disable-infobars')
         chrome_options.add_argument('start-maximized')
 
-        if initial:
-            return webdriver.Chrome(chrome_options=chrome_options)
+        # if initial:
+        return webdriver.Chrome(chrome_options=chrome_options, executable_path="/home/ris/workspace/chromedriver/chromedriver")
 
-        driver = getattr(self.threadLocal, 'driver', None)
-
-        if driver is None:
-            driver = webdriver.Chrome(chrome_options=chrome_options)
-            setattr(self.threadLocal, 'driver', driver)
-
-        return driver
+        # driver = getattr(self.threadLocal, 'driver', None)
+        #
+        # if driver is None:
+        #     driver = webdriver.Chrome(chrome_options=chrome_options, executable_path="/home/ris/workspace/chromedriver/chromedriver")
+        #     setattr(self.threadLocal, 'driver', driver)
+        #
+        # return driver
 
     def setTerms(self, limit=2):
         """
@@ -96,24 +97,25 @@ class Scraper:
 
         return data
 
-    def worker(self, term):
+    def worker(self, dept):
         """
         Cleanses and scrapes data for a specific term
         :param str term:
         """
+        courses = {}
 
         chrome = self.getDriver()
         chrome.get("https://registrar.kfupm.edu.sa/CourseOffering")
 
         time.sleep(5)
 
-        Select(chrome.find_element_by_id("CntntPlcHldr_ddlTerm")).select_by_value(term)
+        # Select(chrome.find_element_by_id("CntntPlcHldr_ddlTerm")).select_by_value(term)
 
-        for dept in self.departments:
+        for term in self.terms:
+            Select(chrome.find_element_by_id("CntntPlcHldr_ddlTerm")).select_by_value(term)
             Select(chrome.find_element_by_id("CntntPlcHldr_ddlDept")).select_by_value(dept)
 
             parser = BeautifulSoup(chrome.page_source, 'html.parser')
-            numberOfCourses = 0
 
             for row in parser.find_all("div", class_="trow"):
                 # fetch data of ONE course
@@ -148,7 +150,7 @@ class Scraper:
                 # removing redundant keys
                 data.pop("Course-Sec", None)
                 data.pop("Time", None)
-                numberOfCourses += 1
+                self.numberCourses += 1
 
                 # storing name and term of latest course scraped
                 # to check whether the previous course that was
@@ -172,7 +174,7 @@ class Scraper:
                 # course object and append it to the courses dict,
                 # otherwise only create a new section object and
                 # append it to courses.sections
-                if courseID not in self.courses:
+                if courseID not in courses:
                     sections = [section]
 
                     course = Course(
@@ -185,13 +187,14 @@ class Scraper:
 
                 else:
                     # Only appends the new section of the same course
-                    self.courses[courseID].sections.append(section)
+                    courses[courseID].sections.append(section)
 
                 # Set course to unique courseID
-                self.courses[courseID] = course
+                courses[courseID] = course
                 logging.info(f"\t {courseID} created")
 
             time.sleep(2)
 
         chrome.quit()
+        return courses
 
