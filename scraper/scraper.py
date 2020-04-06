@@ -1,12 +1,16 @@
 import time
 import logging
 import threading
+import multiprocessing
+
 from bs4 import BeautifulSoup
 from models.courses import Course
 from models.sections import Section
 from selenium import webdriver
 from selenium.webdriver.support.ui import Select
 from selenium.webdriver.chrome.options import Options
+from multiprocessing.pool import ThreadPool
+from multiprocessing import Pool
 
 logging.basicConfig(filename="logs.log", level=logging.INFO)
 # truncating log file before new run
@@ -22,17 +26,17 @@ class Scraper:
         self.departments = []
         # self.threadLocal = threading.local()
 
-        chrome = self.getDriver(initial=True)
-        chrome.get("https://registrar.kfupm.edu.sa/CourseOffering")
+        self.chrome = self.getDriver(initial=True)
+        self.chrome.get("https://registrar.kfupm.edu.sa/CourseOffering")
         time.sleep(5)
 
-        self.parser = BeautifulSoup(chrome.page_source, "html.parser")
+        self.parser = BeautifulSoup(self.chrome.page_source, "html.parser")
         self.setTerms()
         self.setDepartments()
         self.numberCourses = 0
 
         del self.parser
-        chrome.quit()
+        self.chrome.quit()
 
     def getDriver(self, initial=False):
         """
@@ -49,7 +53,7 @@ class Scraper:
         chrome_options.add_argument('start-maximized')
 
         # if initial:
-        return webdriver.Chrome(chrome_options=chrome_options, executable_path="/home/ris/workspace/chromedriver/chromedriver")
+        return webdriver.Chrome(chrome_options=chrome_options)
 
         # driver = getattr(self.threadLocal, 'driver', None)
         #
@@ -97,104 +101,119 @@ class Scraper:
 
         return data
 
+
+    def getData(self):
+
+        # courses = []
+        for term in self.terms:
+            self.chrome = self.getDriver()
+            self.chrome.get("https://registrar.kfupm.edu.sa/CourseOffering")
+            time.sleep(5)
+            Select(self.chrome.find_element_by_id("CntntPlcHldr_ddlTerm")).select_by_value(term)
+
+            courses = Pool(multiprocessing.cpu_count() - 1).map(self.worker, self.departments)
+            print(courses)
+        
+        # return courses
+
     def worker(self, dept):
         """
         Cleanses and scrapes data for a specific term
         :param str term:
         """
         courses = {}
+        
+        Select(self.chrome.find_element_by_id("CntntPlcHldr_ddlDept")).select_by_value(dept)
 
-        chrome = self.getDriver()
-        chrome.get("https://registrar.kfupm.edu.sa/CourseOffering")
+        parser = BeautifulSoup(self.chrome.page_source, 'html.parser')
 
-        time.sleep(5)
 
         # Select(chrome.find_element_by_id("CntntPlcHldr_ddlTerm")).select_by_value(term)
 
-        for term in self.terms:
-            Select(chrome.find_element_by_id("CntntPlcHldr_ddlTerm")).select_by_value(term)
-            Select(chrome.find_element_by_id("CntntPlcHldr_ddlDept")).select_by_value(dept)
+        # for term in self.terms:
+        #     Select(chrome.find_element_by_id("CntntPlcHldr_ddlTerm")).select_by_value(term)
+        #     Select(chrome.find_element_by_id("CntntPlcHldr_ddlDept")).select_by_value(dept)
 
-            parser = BeautifulSoup(chrome.page_source, 'html.parser')
+        #     parser = BeautifulSoup(chrome.page_source, 'html.parser')
 
-            for row in parser.find_all("div", class_="trow"):
-                # fetch data of ONE course
-                data = self.getCourseData(row)
+        for row in parser.find_all("div", class_="trow"):
+            # fetch data of ONE course
+            data = self.getCourseData(row)
 
-                # splitting course name and sections
-                # as required by the schema
-                data["Section"], data["Course"] = (
-                    data["Course-Sec"].split("-")[1],
-                    data["Course-Sec"].split("-")[0]
+            # splitting course name and sections
+            # as required by the schema
+            data["Section"], data["Course"] = (
+                data["Course-Sec"].split("-")[1],
+                data["Course-Sec"].split("-")[0]
+            )
+
+            # Removing space in course code for easier querying
+            data["Course"] = "".join(data["Course"].split())
+
+            # splitting Time as start_time and
+            # end_time as required by schema
+            data["start_time"], data["end_time"] = (
+                data["Time"].split("-")[0],
+                data["Time"].split("-")[1]
+            )
+
+            # setting time as -1 to indicate
+            # that the start_time / end_time
+            # fields are empty
+            if len(data["start_time"]) == 0:
+                data["start_time"] = -1
+
+            if len(data["end_time"]) == 0:
+                data["end_time"] = -1
+
+            # removing redundant keys
+            data.pop("Course-Sec", None)
+            data.pop("Time", None)
+            self.numberCourses += 1
+
+            # storing name and term of latest course scraped
+            # to check whether the previous course that was
+            # scraped is the same so as to only append a
+            # new section to the course object
+            courseID = data["Course"] + term
+
+            section = Section(
+                data["CRN"],
+                data["Section"],
+                data["Instructor"],
+                data["Activity"],
+                data["Day"],
+                data["Loc"],
+                data["start_time"],
+                data["end_time"],
+                data["Status"]
+            )
+
+            # If the new course does not already exist, create a new
+            # course object and append it to the courses dict,
+            # otherwise only create a new section object and
+            # append it to courses.sections
+            if courseID not in courses:
+                sections = [section]
+
+                course = Course(
+                    data["Course"],
+                    data["Course Name"],
+                    term,
+                    dept,
+                    sections
                 )
 
-                # Removing space in course code for easier querying
-                data["Course"] = "".join(data["Course"].split())
+            else:
+                # Only appends the new section of the same course
+                courses[courseID].sections.append(section)
 
-                # splitting Time as start_time and
-                # end_time as required by schema
-                data["start_time"], data["end_time"] = (
-                    data["Time"].split("-")[0],
-                    data["Time"].split("-")[1]
-                )
+            # Set course to unique courseID
+            courses[courseID] = course
+            logging.info(f"\t {courseID} created")
 
-                # setting time as -1 to indicate
-                # that the start_time / end_time
-                # fields are empty
-                if len(data["start_time"]) == 0:
-                    data["start_time"] = -1
+        time.sleep(2)
 
-                if len(data["end_time"]) == 0:
-                    data["end_time"] = -1
-
-                # removing redundant keys
-                data.pop("Course-Sec", None)
-                data.pop("Time", None)
-                self.numberCourses += 1
-
-                # storing name and term of latest course scraped
-                # to check whether the previous course that was
-                # scraped is the same so as to only append a
-                # new section to the course object
-                courseID = data["Course"] + term
-
-                section = Section(
-                    data["CRN"],
-                    data["Section"],
-                    data["Instructor"],
-                    data["Activity"],
-                    data["Day"],
-                    data["Loc"],
-                    data["start_time"],
-                    data["end_time"],
-                    data["Status"]
-                )
-
-                # If the new course does not already exist, create a new
-                # course object and append it to the courses dict,
-                # otherwise only create a new section object and
-                # append it to courses.sections
-                if courseID not in courses:
-                    sections = [section]
-
-                    course = Course(
-                        data["Course"],
-                        data["Course Name"],
-                        term,
-                        dept,
-                        sections
-                    )
-
-                else:
-                    # Only appends the new section of the same course
-                    courses[courseID].sections.append(section)
-
-                # Set course to unique courseID
-                courses[courseID] = course
-                logging.info(f"\t {courseID} created")
-
-            time.sleep(2)
-
-        chrome.quit()
+        self.chrome.quit()
         return courses
 

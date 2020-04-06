@@ -2,22 +2,20 @@ import logging
 from datetime import datetime
 from scraper.scraper import Scraper
 from scraper.database import Database
-from multiprocessing.pool import ThreadPool
-from multiprocessing import Pool
-import multiprocessing
 
 startTime = datetime.now()
 
 scraper = Scraper()
 # courses = ThreadPool(5).map(scraper.worker, scraper.terms)
-courses = Pool(multiprocessing.cpu_count() - 1).map(scraper.worker, scraper.departments)
+# courses = Pool(multiprocessing.cpu_count() - 1).map(scraper.worker, scraper.departments)
+courses = scraper.getData()
 
 # for name, data in scraper.courses.items():
 #     print(f"{name} : {data}")
 
-print(courses)
+# print(courses)
 
-print(f"Number of courses: {scraper.numberCourses}")
+# print(f"Number of courses: {scraper.numberCourses}")
 
 # db = Database()
 # db.create_tables()
