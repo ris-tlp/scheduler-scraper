@@ -55,13 +55,13 @@ class Scraper:
 
         if initial:
             return webdriver.Chrome(chrome_options=chrome_options,
-                                    executable_path="/home/ris/workspace/chromedriver/chromedriver")
+                                    executable_path="/home/ris/workspace/webdrivers/chromedriver")
 
         driver = getattr(self.threadLocal, 'driver', None)
 
         if driver is None:
             driver = webdriver.Chrome(chrome_options=chrome_options,
-                                      executable_path="/home/ris/workspace/chromedriver/chromedriver")
+                                      executable_path="/home/ris/workspace/webdrivers/chromedriver")
             setattr(self.threadLocal, 'driver', driver)
 
         return driver
@@ -112,7 +112,7 @@ class Scraper:
         # time.sleep(5)
 
         # args = [(term, dept) for dept in self.departments]
-        courses = ThreadPool(5).map(self.worker, self.departments)
+        courses = ThreadPool(4).map(self.worker, self.departments)
 
         for course in courses:
             combined_courses = {**combined_courses, **course}
